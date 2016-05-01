@@ -1,5 +1,7 @@
 # Parser
 
+[![Build Status](https://travis-ci.org/mr-doc/parser.svg?branch=master)](https://travis-ci.org/mr-doc/parser)
+
 This repo contains the source file for the parser. There are a few things to cover
 in order to understand how the parser works.
 
