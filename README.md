@@ -1,6 +1,6 @@
 # Parser
 
-This directory contains the source file for the parser. There are a few things to cover
+This repo contains the source file for the parser. There are a few things to cover
 in order to understand how the parser works.
 
 ## Specification
@@ -31,11 +31,12 @@ class IParser {
     this.options = options;
   }
   /**
-   * Parses the sources' comments into the desired output.
-   * @param  {Array<Object>} results - The files to parse.
+   * Parses the source comments from the file into the desired output.
+   * @param  {Object} file - The file to parse.
+   * @param  {String} file.source - The source comment in the file.
    * @return {Array<Object>} - The parsed comments.
    */
-  parse(sources) {
+  parse(file) {
     // ...
   }
 }
