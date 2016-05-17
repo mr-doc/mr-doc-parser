@@ -1,7 +1,6 @@
 {
-  "name": "parser",
+  "name": "mr-doc-parser",
   "version": "1.0.0",
-  "private": true,
   "description": "This directory contains the source file for the parser. There are a few things to cover\r in order to understand how the parser works.",
   "main": "index.js",
   "scripts": {
