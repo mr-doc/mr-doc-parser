@@ -1,4 +1,5 @@
 'use strict';
+
 const JavaScript = require('./parsers/javascript/');
 
 class Parser {
@@ -11,7 +12,7 @@ class Parser {
       case 'javascript':
         return (new JavaScript(this.options));
       default:
-        return null;
+        return { parse: () => {} };
     }
   }
 }

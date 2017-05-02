@@ -14,9 +14,28 @@ describe('parser', () => {
       return 'Hello';
     }
   `;
-  it('should return an object containing the parsed comments', () => {
-    const result = parser.parse({ source });
-    assert.isArray(result);
-    assert.isTrue(result.length === 1);
+  describe('espree', function () {
+    it('should return an object containing the parsed comments', () => {
+      const result = parser.parse({ source });
+      assert.isArray(result);
+      assert.isTrue(result.length === 1);
+    });
+  });
+
+  describe('acorn', function () {
+    it('should return an object containing the parsed comments', () => {
+      parser.options.engine = 'acorn';
+      const result = parser.parse({ source });
+      assert.isArray(result);
+      assert.isTrue(result.length === 1);
+    });
+  });
+  describe('babylon', function () {
+    it('should return an object containing the parsed comments', () => {
+      parser.options.engine = 'babylon';
+      const result = parser.parse({ source });
+      assert.isArray(result);
+      assert.isTrue(result.length === 1);
+    });
   });
 });

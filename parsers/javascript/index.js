@@ -1,16 +1,18 @@
 'use strict';
 
 const Doctrine = require('doctrine');
-const IParser = require('../interface');
 const Engine = require('../../engines/javascript');
 const _ = require('lodash');
-const Log = require('mr-doc-utils').Log;
-const log = new Log();
 const $ = require('./utils.js');
 
-class JavaScript extends IParser {
+const Log = require('mr-doc-utils').Log;
+
+const log = new Log();
+
+
+class JavaScript {
   constructor(options) {
-    super(options);
+    this.options = options;
     this.visited = {};
     this.engine = new Engine(this.options);
     this.comments = [];
@@ -24,7 +26,7 @@ class JavaScript extends IParser {
     this.file = _.isString(file) ? { source: file } : file;
     this.ast = this.engine.parse(this.file);
     // DEBUG: AST
-    log.debug(Log.color.blue('Length of AST:'), this.ast.body.length);
+    log.debug(Log.color.blue('Length of AST:'), this.ast.body);
     [
       { type: 'leadingComments', context: true },
       { type: 'innerComments', context: false },
@@ -38,7 +40,7 @@ class JavaScript extends IParser {
    */
   walkComments(comment) {
     Engine.traverse(this.options, this.ast, node => (node[comment.type] || [])
-        .filter(this.isJSDocComment)
+        .filter(JavaScript.isJSDocComment)
         .forEach(this.parseComment(node, comment.context)));
   }
   /**
@@ -51,6 +53,7 @@ class JavaScript extends IParser {
     range = !range ? node.range : range;
     range = !range ? [node.start, node.end] : range;
     const context = {
+      comments: node.leadingComments,
       code: null,
       file: this.file,
       loc: _.extend({}, JSON.parse(JSON.stringify(node.loc))),
@@ -68,9 +71,11 @@ class JavaScript extends IParser {
             enumerable: false,
             value: node,
           });
+          /* eslint-disable prefer-spread */
           context.code = this.file.source.substring.apply(this.file.source, range);
+          /* eslint-enable prefer-spread */
         }
-        this.results.push(this.parseJSDoc(comment.value, comment.loc, context));
+        this.results.push(JavaScript.parseJSDoc(comment.value, comment.loc, context));
       }
     };
   }
@@ -80,7 +85,7 @@ class JavaScript extends IParser {
    * @param {Location} - The comment location.
    * @param {Boolean} - The truth value on whether to include the context.
    */
-  parseJSDoc(comment, loc, context) {
+  static parseJSDoc(comment, loc, context) {
     const result = Doctrine.parse(comment, {
       lineNumbers: true,
       recoverable: true,
@@ -107,7 +112,7 @@ class JavaScript extends IParser {
    * @param {String} - The comment to determine.
    * @return {Boolean} - The truth value.
    */
-  isJSDocComment(comment) {
+  static isJSDocComment(comment) {
     const asterisks = comment.value.match(/^(\*+)/);
     return (comment.type === 'CommentBlock' ||
       comment.type === 'Block')

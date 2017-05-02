@@ -9,11 +9,13 @@ const traverse = require('babel-traverse').default;
 
 const opts = {
   acorn: (version, comments, tokens) => ({
-    ecmaVersion: version,
-    locations: true,
-    onComment: comments,
-    onToken: tokens,
+    // ecmaVersion: version,
+    // collect ranges for each node
     ranges: true,
+    // collect comments in Esprima's format
+    onComment: comments,
+    // collect token ranges
+    onToken: tokens,
   }),
   babylon: () => ({
     allowImportExportEverywhere: true,
@@ -35,7 +37,7 @@ const opts = {
     ],
     sourceType: 'module',
   }),
-  espree: (version) => ({
+  espree: version => ({
     attachComment: true,
     comment: true,
     ecmaFeatures: {
@@ -55,17 +57,6 @@ const opts = {
 class Engine {
   constructor(options) {
     this.options = options;
-    switch (this.options.engine) {
-      case 'acorn':
-        this.engine = Acorn;
-        break;
-      case 'espree':
-        this.engine = Espree;
-        break;
-      default:
-        this.engine = Babylon;
-        break;
-    }
   }
   parse(file) {
     const comments = [];
@@ -73,16 +64,15 @@ class Engine {
     try {
       switch (this.options.engine) {
         case 'acorn':
-          return ESCodeGen
-          .attachComments(this.engine.parse(file.source,
+          return ESCodeGen.attachComments(Acorn.parse(file.source,
             opts.acorn(this.options.version, comments, tokens)), comments, tokens);
         case 'espree':
-          return this.engine.parse(file.source, opts.espree(this.options.version));
+          return Espree.parse(file.source, opts.espree(this.options.version));
         default:
-          return this.engine.parse(file.source, opts.babylon());
+          return Babylon.parse(file.source, opts.babylon());
       }
     } catch (error) {
-      throw (new Error(error));
+      throw error;
     }
   }
   static traverse(options, ast, callback) {
@@ -92,19 +82,28 @@ class Engine {
           enter: (path) => {
             const node = path.node;
             callback(node);
-          } });
+          },
+        });
         break;
       default:
-        ESTraverse.traverse(ast, {
-          /* eslint-disable no-param-reassign */
-          enter: (node) => {
+        ESTraverse.traverse(ast.program, {
+          /* eslint-disable no-param-reassign, no-console, object-shorthand */
+          enter: function (node) {
             if (node.type === 'Program') {
               node = node.body[0];
             }
+            if (node.type === 'File') {
+              this.skip();
+            }
+            if (node.type === 'StringLiteral') {
+              callback(node);
+              this.skip();
+            }
             callback(node);
-          } });
-          /* eslint-enable no-param-reassign */
-        break;
+          },
+        });
+      /* eslint-enable no-param-reassign, no-console, object-shorthand */
+      // break;
     }
   }
 }

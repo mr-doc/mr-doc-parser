@@ -1,6 +1,8 @@
 'use strict';
+
 const _ = require('lodash');
 const synonyms = require('./synonyms.js');
+
 class Utils {
   /**
    * Normalize the comment tags.
@@ -9,7 +11,7 @@ class Utils {
    */
   static normalize(comment) {
     return _.assignIn({}, comment, {
-      tags: comment.tags.map(tag => {
+      tags: comment.tags.map((tag) => {
         let title = tag.title.toLowerCase();
         const canonical = synonyms[title];
         if (!canonical) {
