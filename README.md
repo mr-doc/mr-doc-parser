@@ -15,31 +15,51 @@ There are various languages that the parser hopes to support but the available o
   * Babylon (default)
   * Espree
 
-The parser should only produce a an array with the results attached and ready to be passed down to the compiler.
+The parser should only produce an array with the results attached and ready to be passed down to the compiler.
 
 ### Interface
 
 Initially the interface was written in TypeScript, but to keep things simple for those who are not familiar with TypeScript and would like to contribute, I decided to stick with ES6 (without Babel).
 
-The following would be interface that must be implemented (unless specified):
+The following would be interface that must be implemented:
 
 ```javascript
-class IParser {
+interface IParser {
   /**
    * IParser
    * @param  {Object} options - The options for the compiler provided by mr-doc-utils/options
    */
-  constructor(options) {
-    this.options = options;
-  }
+  options: Option
   /**
    * Parses the source comments from the file into the desired output.
    * @param  {Object} file - The file to parse.
    * @param  {String} file.source - The source comment in the file.
    * @return {Array<Object>} - The parsed comments.
    */
-  parse(file) {
+  parse(file: { source: string } ): AST[] {
     // ...
   }
 }
+```
+
+### AST
+
+The ast that the parser must return should be in the following format:
+
+```javascript
+
+[{
+  description: string,
+  tags: any[],
+  loc: start: { line: number, column: number }, end: { line: number, column: number },
+  context: {
+    comments: any[],
+    code: string,
+    file: { source: string || '' },
+    loc: start: { line: number, column: number }, end: { line: number, column: number },
+    range: { column: [number, number], line: [number, number] },
+  },
+  errors: [],
+}]
+
 ```

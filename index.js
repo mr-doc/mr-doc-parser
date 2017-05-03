@@ -12,7 +12,21 @@ class Parser {
       case 'javascript':
         return (new JavaScript(this.options));
       default:
-        return { parse: () => {} };
+        return {
+          parse: file => ([{
+            description: '',
+            tags: [],
+            loc: null,
+            context: {
+              comments: [],
+              code: null,
+              file: { source: file || '' },
+              loc: null,
+              range: null,
+            },
+            errors: [],
+          }]),
+        };
     }
   }
 }
