@@ -99,7 +99,7 @@ class Engine {
               callback(node);
               this.skip();
             }
-            callback(node);
+            if (node) callback(node);
           },
         });
       /* eslint-enable no-param-reassign, no-console, object-shorthand */
