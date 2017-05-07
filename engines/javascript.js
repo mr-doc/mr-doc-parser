@@ -89,13 +89,13 @@ class Engine {
         ESTraverse.traverse(ast.program, {
           /* eslint-disable no-param-reassign, no-console, object-shorthand */
           enter: function (node) {
-            if (node.type === 'Program') {
+            if (node && node.type === 'Program') {
               node = node.body[0];
             }
-            if (node.type === 'File') {
+            if (node && node.type === 'File') {
               this.skip();
             }
-            if (node.type === 'StringLiteral') {
+            if (node && ['StringLiteral', 'classMethod'].indexOf(node.type) > -1) {
               callback(node);
               this.skip();
             }

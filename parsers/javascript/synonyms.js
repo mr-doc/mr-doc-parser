@@ -18,4 +18,5 @@ module.exports = {
   prop: 'property',
   return: 'returns',
   var: 'member',
+  let: 'member',
 };
