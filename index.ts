@@ -1,6 +1,6 @@
 'use strict';
-import JavaScript from './parser/javascript/index';
-import IParser, { IParseResult, IFile } from './parser/interface';
+import JavaScript from './src/javascript/index';
+import IParser, { IParseResult, IFile } from './src/interface';
 
 export default class Parser {
   options: {
