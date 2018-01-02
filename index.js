@@ -1,6 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_1 = require("./parser/javascript/index");
+const index_1 = require("./src/javascript/index");
 class Parser {
     constructor(options) {
         this.options = options;
