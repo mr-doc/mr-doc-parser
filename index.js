@@ -1,33 +1,22 @@
 'use strict';
-
-const JavaScript = require('./parsers/javascript/');
-
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_1 = require("./parser/javascript/index");
 class Parser {
-  constructor(options) {
-    this.options = options;
-  }
-  factory() {
-    switch (this.options.parser.language) {
-      case 'js':
-      case 'javascript':
-        return (new JavaScript(this.options));
-      default:
-        return {
-          parse: file => ([{
-            description: '',
-            tags: [],
-            loc: null,
-            context: {
-              comments: [],
-              code: null,
-              file: { source: file || '' },
-              loc: null,
-              range: null,
-            },
-            errors: [],
-          }]),
-        };
+    constructor(options) {
+        this.options = options;
     }
-  }
+    /*
+      @param file: IFile
+     */
+    parse(file) {
+        switch (this.options.language) {
+            case 'js':
+            case 'javascript':
+                return (new index_1.default().parse(file));
+            default:
+                return { type: '', file: { name: '', source: '' }, comments: [] };
+        }
+    }
 }
-module.exports = Parser;
+exports.default = Parser;
+//# sourceMappingURL=index.js.map

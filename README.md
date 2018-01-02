@@ -2,64 +2,26 @@
 
 [![Build Status](https://travis-ci.org/mr-doc/mr-doc-parser.svg?branch=master)](https://travis-ci.org/mr-doc/mr-doc-parser)
 
-This repo contains the source file for the parser. There are a few things to cover
-in order to understand how the parser works.
-
 ## Specification
 
-The parser in `index.js`, uses the Factory Pattern to create different parsers for the specified language.
+A parser must implement the following interface:
 
-There are various languages that the parser hopes to support but the available ones are the following:
-* JavaScript
-  * Acorn
-  * Babylon (default)
-  * Espree
-
-The parser should only produce an array with the results attached and ready to be passed down to the compiler.
-
-### Interface
-
-Initially the interface was written in TypeScript, but to keep things simple for those who are not familiar with TypeScript and would like to contribute, I decided to stick with ES6 (without Babel).
-
-The following would be interface that must be implemented:
-
-```javascript
+```typescript
 interface IParser {
-  /**
-   * IParser
-   * @param  {Object} options - The options for the compiler provided by mr-doc-utils/options
-   */
-  options: Option
-  /**
-   * Parses the source comments from the file into the desired output.
-   * @param  {Object} file - The file to parse.
-   * @param  {String} file.source - The source comment in the file.
-   * @return {Array<Object>} - The parsed comments.
-   */
-  parse(file: { source: string } ): AST[] {
-    // ...
-  }
+  parse: (file: IFile) => IParseResult
 }
 ```
 
-### AST
+The output should be in the following format:
 
-The ast that the parser must return should be in the following format:
+```typescript
 
-```javascript
-
-[{
-  description: string,
-  tags: any[],
-  loc: start: { line: number, column: number }, end: { line: number, column: number },
-  context: {
-    comments: any[],
-    code: string,
-    file: { source: string || '' },
-    loc: start: { line: number, column: number }, end: { line: number, column: number },
-    range: { column: [number, number], line: [number, number] },
-  },
-  errors: [],
-}]
+interface IParseResult {
+  comments: IComment[],
+  type: string,
+  file: IFile
+}
 
 ```
+
+These interfaces are defined in `parser/interface.ts`.
