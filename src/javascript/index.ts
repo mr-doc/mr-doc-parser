@@ -1,13 +1,13 @@
 'use strict';
 import * as _ from "lodash";
-import * as Utils from 'mr-doc-utils';
+import Util from 'mr-doc-utils';
 import { File, Comment, CommentBlock, CommentLine } from 'babel-types';
 import { parse } from 'babylon';
 import { traverse } from 'babel-core';
 import Parser, { IParseResult, ICommentType, ICommentContext, IComment } from '../interface';
 import { NodePath, Node } from "babel-traverse";
 
-const { Log } = Utils;
+const { Log } = Util;
 const log = new Log();
 
 export default class JavaScript implements Parser {
