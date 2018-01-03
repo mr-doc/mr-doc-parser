@@ -1,9 +1,9 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-const Utils = require("mr-doc-utils");
+const mr_doc_utils_1 = require("mr-doc-utils");
 const babylon_1 = require("babylon");
 const babel_core_1 = require("babel-core");
-const { Log } = Utils;
+const { Log } = mr_doc_utils_1.default;
 const log = new Log();
 class JavaScript {
     constructor() {

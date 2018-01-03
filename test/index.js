@@ -1,7 +1,6 @@
 /* eslint-env mocha */
 const assert = require('chai').assert;
 const Parser = require('../').default;
-const Option = require('mr-doc-utils').Option;
 
 describe('Parser', () => {
   const source = `
