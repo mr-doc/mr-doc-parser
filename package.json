@@ -18,7 +18,6 @@
   "homepage": "https://github.com/mr-doc/parser#readme",
   "devDependencies": {
     "@types/node": "^8.5.5",
-    "babel-core": "^6.24.1",
     "chai": "^4.1.2",
     "eslint": "^4.14.0",
     "eslint-config-airbnb": "^16.1.0",
@@ -35,6 +34,7 @@
     "@types/babel-core": "^6.25.3",
     "@types/lodash": "^4.14.91",
     "babel-traverse": "^6.7.6",
+    "babel-core": "^6.24.1",
     "babylon": "^6.7.0",
     "lodash": "^4.11.1",
     "mr-doc-utils": "git+https://github.com/mr-doc/mr-doc-utils.git"
