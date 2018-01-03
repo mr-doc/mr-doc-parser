@@ -2,6 +2,8 @@
 import JavaScript from './src/javascript/index';
 import IParser, { IParseResult, IFile } from './src/interface';
 
+export * from './src/interface';
+
 export default class Parser {
   options: {
     language: string,
