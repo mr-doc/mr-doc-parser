@@ -1,18 +1,17 @@
 'use strict';
 import JavaScript from './src/javascript/index';
-import IParser, { IParseResult, IFile } from './src/interface';
+import { IParser, IParseResult, IFile } from './src/interface';
 
-export * from './src/interface';
-
-export default class Parser {
-  options: {
+export default class Parser implements IParser {
+  private options: {
     language: string,
   }
   constructor(options: any) {
     this.options = options;
   }
-  /*
-    @param file: IFile
+  /**
+   * @param file: IFile
+   * @return IParseResult
    */
   parse(file: IFile): IParseResult {
     switch (this.options.language) {
@@ -24,3 +23,5 @@ export default class Parser {
     }
   }
 }
+
+export * from './src/interface';

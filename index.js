@@ -5,8 +5,9 @@ class Parser {
     constructor(options) {
         this.options = options;
     }
-    /*
-      @param file: IFile
+    /**
+     * @param file: IFile
+     * @return IParseResult
      */
     parse(file) {
         switch (this.options.language) {

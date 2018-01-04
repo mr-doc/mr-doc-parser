@@ -31,6 +31,6 @@ export interface IParseResult {
   file: IFile
 }
 
-export default interface IParser {
+export interface IParser {
   parse: (file: IFile) => IParseResult
 }
