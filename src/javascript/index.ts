@@ -41,7 +41,7 @@ export default class JavaScript implements IParser {
       ]
     });
     // DEBUG: AST
-    log.debug(Log.color.blue('Length of AST:'), this.ast.program);
+    log.debug(Log.color.blue(`Parsing Javascript file: ${file.name}`));
     let types: ICommentType[] = [
       { type: 'leadingComments', context: true },
       { type: 'innerComments', context: false },

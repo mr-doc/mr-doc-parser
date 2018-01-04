@@ -36,7 +36,7 @@ class JavaScript {
             ]
         });
         // DEBUG: AST
-        log.debug(Log.color.blue('Length of AST:'), this.ast.program);
+        log.debug(Log.color.blue(`Parsing Javascript file: ${file.name}`));
         let types = [
             { type: 'leadingComments', context: true },
             { type: 'innerComments', context: false },
