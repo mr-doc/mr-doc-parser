@@ -4,13 +4,13 @@ import Util from 'mr-doc-utils';
 import { File, Comment, CommentBlock, CommentLine } from 'babel-types';
 import { parse } from 'babylon';
 import { traverse } from 'babel-core';
-import Parser, { IParseResult, ICommentType, ICommentContext, IComment } from '../interface';
+import { IParser, IParseResult, ICommentType, ICommentContext, IComment } from '../interface';
 import { NodePath, Node } from "babel-traverse";
 
 const { Log } = Util;
 const log = new Log();
 
-export default class JavaScript implements Parser {
+export default class JavaScript implements IParser {
   private visited = new Map<string, boolean>();
   private comments = [];
   private docs: IComment[] = [];
