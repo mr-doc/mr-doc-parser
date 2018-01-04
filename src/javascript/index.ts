@@ -57,23 +57,24 @@ export default class JavaScript implements IParser {
   private walk(commentType: ICommentType) {
     traverse(this.ast, {
       enter: path => {
+        let type: (keyof Node) = commentType.type;
         const parseComment = (comment: Comment) => {
           const result = this.addComment(path, comment, commentType.context);
           if (result.context.code !== '')
             this.docs.push(result);
         };
 
-        let key: (keyof Node) = commentType.type;
-        (path.node[key] || []).filter((comment: CommentBlock | CommentLine | Comment) => {
+        (path.node[type] || []).filter((comment: CommentBlock | CommentLine | Comment) => {
           return 'type' in comment && (<CommentBlock>comment).type === 'CommentBlock';
         }).forEach(parseComment);
       }
     });
   }
-
-  private addComment(path: NodePath, comment: Comment, includeContext: boolean): IComment {
+  
+  private addComment(path: NodePath, comment: CommentBlock | CommentLine | Comment, includeContext: boolean): IComment {
     let file = this.file;
     let key = file.name + ':' + comment.loc.start.line + ':' + comment.loc.start.column;
+
     let context: ICommentContext = {
       location: {
         start: { line: 0, column: 0 },
@@ -83,6 +84,14 @@ export default class JavaScript implements IParser {
     };
     if (!this.visited.get(key)) {
       this.visited.set(key, true);
+      
+      // Normalize the comments since bable strips
+      // the markers (/*, */, //)
+      switch((<CommentBlock | CommentLine>comment).type) {
+        case 'CommentBlock': comment.value = `/*${comment.value}*/`;
+        break;
+        case 'CommentLine': comment.value = `//${comment.value}`;
+      }
 
       context = {
         location: path.node.loc,

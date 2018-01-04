@@ -52,13 +52,13 @@ class JavaScript {
     walk(commentType) {
         babel_core_1.traverse(this.ast, {
             enter: path => {
+                let type = commentType.type;
                 const parseComment = (comment) => {
                     const result = this.addComment(path, comment, commentType.context);
                     if (result.context.code !== '')
                         this.docs.push(result);
                 };
-                let key = commentType.type;
-                (path.node[key] || []).filter((comment) => {
+                (path.node[type] || []).filter((comment) => {
                     return 'type' in comment && comment.type === 'CommentBlock';
                 }).forEach(parseComment);
             }
@@ -76,6 +76,14 @@ class JavaScript {
         };
         if (!this.visited.get(key)) {
             this.visited.set(key, true);
+            // Normalize the comments since bable strips
+            // the markers (/*, */, //)
+            switch (comment.type) {
+                case 'CommentBlock':
+                    comment.value = `/*${comment.value}*/`;
+                    break;
+                case 'CommentLine': comment.value = `//${comment.value}`;
+            }
             context = {
                 location: path.node.loc,
                 code: ''
