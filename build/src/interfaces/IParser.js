@@ -1,0 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class IParser {
+    constructor(file, options) {
+    }
+}
+exports.default = IParser;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVBhcnNlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9pbnRlcmZhY2VzL0lQYXJzZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFHQSxNQUE4QixPQUFPO0lBQ25DLFlBQVksSUFBVyxFQUFFLE9BQVk7SUFFckMsQ0FBQztDQUVGO0FBTEQsMEJBS0MiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgSUZpbGUgZnJvbSBcIi4vSUZpbGVcIjtcbmltcG9ydCBJUmVzdWx0IGZyb20gXCIuL0lSZXN1bHRcIjtcblxuZXhwb3J0IGRlZmF1bHQgYWJzdHJhY3QgY2xhc3MgSVBhcnNlciB7XG4gIGNvbnN0cnVjdG9yKGZpbGU6IElGaWxlLCBvcHRpb25zOiBhbnkpIHtcblxuICB9XG4gIGFic3RyYWN0IHBhcnNlKCk6IElSZXN1bHRcbn0iXX0=

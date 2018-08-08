@@ -1,27 +1,37 @@
-'use strict';
-import JavaScript from './src/javascript/index';
-import { IParser, IParseResult, IFile } from './src/interface';
+import IFile from './src/interfaces/IFile';
+import IResult from './src/interfaces/IResult';
+import ParserFactory from './src/ParserFactory';
+import IParser from './src/interfaces/IParser';
+import * as FS from 'fs';
 
+/**
+ * A class that parses a source code and generates
+ * 
+ * # API
+ * 
+ * ```
+ * @class Parser
+ * @implements IParser
+ * ```
+ */
 export default class Parser implements IParser {
-  private options: {
-    language: string,
+
+  private parser: IParser;
+  constructor(file: IFile, options: any = {}) {
+    this.parser = (new ParserFactory(file, options)).getParser();
   }
-  constructor(options: any) {
-    this.options = options;
-  }
-  /**
-   * @param file: IFile
-   * @return IParseResult
-   */
-  parse(file: IFile): IParseResult {
-    switch (this.options.language) {
-      case 'js':
-      case 'javascript':
-        return (new JavaScript().parse(file));
-      default:
-        return { type: '', file: { name: '', source: '' }, comments: [] };
-    }
+  parse = (): IResult => {
+    return this.parser.parse()
   }
 }
 
-export * from './src/interface';
+const result = new Parser({
+  name: 'index.ts',
+  path: '../../',
+  text: FS.readFileSync(`${process.cwd()}/index.ts`, 'utf-8')
+}, {
+  language: 'typescript'
+}).parse();
+
+
+// console.log(JSON.stringify(result, null, 2))

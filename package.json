@@ -2,7 +2,7 @@
   "name": "mr-doc-parser",
   "version": "1.0.0",
   "description": "The official parser for Mr. Doc",
-  "main": "index.js",
+  "main": "./build/index.js",
   "scripts": {
     "test": "gulp"
   },
@@ -17,27 +17,21 @@
   },
   "homepage": "https://github.com/mr-doc/parser#readme",
   "devDependencies": {
-    "@types/mocha": "^2.2.45",
-    "@types/node": "^8.5.5",
+    "@types/mocha": "^2.2.48",
+    "@types/node": "^8.10.23",
     "chai": "^4.1.2",
-    "eslint": "^4.14.0",
-    "eslint-config-airbnb": "^16.1.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.5.1",
-    "gulp": "^3.9.1",
-    "gulp-eslint": "^4.0.0",
-    "gulp-mocha": "^5.0.0",
-    "mocha": "^4.1.0",
-    "mr-doc-utils": "git+https://github.com/mr-doc/mr-doc-utils.git"
+    "mocha": "^4.1.0"
   },
   "dependencies": {
-    "@types/babel-core": "^6.25.3",
-    "@types/lodash": "^4.14.91",
+    "@types/babel-core": "^6.25.5",
+    "@types/lodash": "^4.14.116",
+    "babel-core": "^6.26.3",
     "babel-traverse": "^6.7.6",
-    "babel-core": "^6.24.1",
     "babylon": "^6.7.0",
-    "lodash": "^4.11.1",
-    "mr-doc-utils": "git+https://github.com/mr-doc/mr-doc-utils.git"
+    "lodash": "^4.17.10",
+    "tree-sitter": "^0.13.4",
+    "tree-sitter-javascript": "^0.13.3",
+    "tree-sitter-typescript": "^0.13.3",
+    "xdoc-parser": "^2.1.6"
   }
 }
