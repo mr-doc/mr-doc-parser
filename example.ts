@@ -32,7 +32,7 @@ export default class A {
  * @class C
  * ```
  */
-export class C implements A {
+export class C extends A {
   /**
    * A property
    * # API
@@ -40,7 +40,9 @@ export class C implements A {
    * @property: any
    * ```
    */
-  property: any
+  private a() {
+
+  }
 }
 
 // /**

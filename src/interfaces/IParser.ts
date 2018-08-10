@@ -5,5 +5,5 @@ export default abstract class IParser {
   constructor(file: IFile, options: any) {
 
   }
-  abstract parse(): IResult
+  abstract parse(): any
 }
