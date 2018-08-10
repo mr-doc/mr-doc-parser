@@ -64,7 +64,7 @@ export default class CommentParser {
   ) {
     // console.log(node.type)
     if (node.type === "comment" && node.nextSibling) {
-      console.log(node.nextSibling.type)
+      // console.log(node.nextSibling.type)
       // console.log(`${node.nextSibling.type} has a leading comment.`);
       const next = node.nextSibling;
 

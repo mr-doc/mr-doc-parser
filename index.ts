@@ -28,7 +28,7 @@ export default class Parser implements IParser {
 const result = new Parser({
   name: 'index.ts',
   path: '../../',
-  text: FS.readFileSync(`${process.cwd()}/index.ts`, 'utf-8')
+  text: FS.readFileSync(`${process.cwd()}/example.ts`, 'utf-8')
 }, {
   language: 'typescript'
 }).parse();
