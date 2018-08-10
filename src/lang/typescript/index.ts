@@ -61,6 +61,7 @@ export default class TypeScriptParser implements IParser {
           // Determine whether a comment has a sibling
           if (nextSibling) {
             // Visit the sibling
+            // Perf: Possibly O(n^2)
             this.visitNode(nextSibling, child, {
               exports: {
                 export: false,
@@ -74,7 +75,7 @@ export default class TypeScriptParser implements IParser {
   }
 
   private visitExportStatement = (
-    node: Parser.SyntaxNode, 
+    node: Parser.SyntaxNode,
     leadingComment: Parser.SyntaxNode
   ) => {
     let isDefaultExport = false;
@@ -96,8 +97,8 @@ export default class TypeScriptParser implements IParser {
   }
 
   private visitClass = (
-    node: Parser.SyntaxNode, 
-    leadingComment: Parser.SyntaxNode, 
+    node: Parser.SyntaxNode,
+    leadingComment: Parser.SyntaxNode,
     properties: Partial<NodeProperties>
   ) => {
     // console.log(node.children);
@@ -105,7 +106,7 @@ export default class TypeScriptParser implements IParser {
     // Remove 'class' since we already know that
     children = children.slice(1);
     // Get the class/type identifier
-    const classIdentifier = this.getContext(children[0]);
+    const classIdentifier = this.getNodeContext(children[0]);
     // Remove the identifier
     children = children.slice(1);
 
@@ -116,19 +117,17 @@ export default class TypeScriptParser implements IParser {
 
     // Determine whether the class extends or implements
     if (children[0].type.match("class_heritage")) {
-      if (this.getContext(children[0]).text.includes("implements")) {
+      if (this.getNodeContext(children[0]).text.includes("implements")) {
         classProperties.implements = true;
-      } else if  (this.getContext(children[0]).text.includes("extends")) {
+      } else if (this.getNodeContext(children[0]).text.includes("extends")) {
         classProperties.extends = true;
       }
       // Remove the heritage node
       children = children.slice(1);
     }
 
-    const classBody = children[0];
-
-    console.log(classBody.children);
-    
+    let classBody: any = children[0];
+    classBody = this.visitClassBody(classBody);
     // return {
     //   class: {
     //     name: 
@@ -136,9 +135,63 @@ export default class TypeScriptParser implements IParser {
     // }
   }
 
+  private visitClassBody(node: Parser.SyntaxNode) {
+    const methods = [];
+    // Perf: O(n)
+    node.children.forEach(classChild => {
+      if (classChild.type.match("comment") && this.isCStyleComment(classChild)) {
+        const nextSibling = classChild.nextSibling;
+        if (nextSibling) {
+          switch (nextSibling.type) {
+            case 'method_definition':
+              methods.push(this.visitClassMethod(nextSibling, classChild));
+              break;
+            default:
+              this.warnNotSupported(nextSibling);
+              
+              break;
+          }
+        }
+      }
+    });
+    // console.log(JSON.stringify(methods[0], null, 2));
+    
+    return {
+      methods,
+    }
+  }
+
+
+  private visitClassMethod = (
+    node: Parser.SyntaxNode,
+    leadingComment: Parser.SyntaxNode
+  ) => {
+    let children = node.children;
+    let isProperty = false;
+    // Determine whether it is a property
+    if (children[0].type.match("get")) {
+      isProperty = true;
+      // Remove the 'get' node
+      children = children.slice(1);
+    }
+    // Get the formal parameters
+    const formal_parameters = children[1].children[0];
+    const parameters = formal_parameters.children;
+    // console.log(parameters);
+    
+    return {
+      identifier: this.getNodeContext(children[0]),
+      // Note: parameters contains '(' ... ')'
+      parameters: parameters.map(this.getNodeContext.bind(this)),
+      comment: this.getNodeContext(leadingComment),
+      context: this.getNodeContext(node)
+
+    }
+  }
+
 
   private visitNode = (node: Parser.SyntaxNode, leadingComment: Parser.SyntaxNode, properties: Partial<NodeProperties>) => {
-    const context = this.getContext(node);
+    const context = this.getNodeContext(node);
     switch (node.type) {
       // Note: Export statemens may include 
       case 'export_statement':
@@ -149,13 +202,16 @@ export default class TypeScriptParser implements IParser {
         break;
       case 'interface_declaration':
         break;
+      case 'comment':
+      // noop
+      break;
       case 'ERROR':
         console.error(
           `[mr-doc::parser]: 'tree-sitter' was not able to parse at row ${context.location.row.start + 1}.`
         )
         break;
       default:
-        console.log(`[mr-doc::parser]: ${node.type} is not supported yet.`);
+        this.warnNotSupported(node);
 
         break;
     }
@@ -163,7 +219,7 @@ export default class TypeScriptParser implements IParser {
   /* Helpers */
 
   private isCStyleComment(node: Parser.SyntaxNode) {
-    const comment = this.getContext(node).text;
+    const comment = this.getNodeContext(node).text;
     // https://blog.ostermiller.org/find-comment
     return comment.match(/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/);
   }
@@ -185,10 +241,14 @@ export default class TypeScriptParser implements IParser {
     }
   }
 
-  private getContext(node: Parser.SyntaxNode) {
+  private getNodeContext(node: Parser.SyntaxNode) {
     return {
       ...location(node),
       text: this.file.text.substring(node.startIndex, node.endIndex)
     }
+  }
+
+  private warnNotSupported = (node: Parser.SyntaxNode) => {
+    console.log(`[mr-doc::parser]: '${node.type.replace(/[_]/g, ' ')}' is not supported yet.`);
   }
 }

@@ -34,13 +34,13 @@ export default class A {
  */
 export class C implements A {
   /**
+   * A property
+   * # API
    * ```
-   * @method a
+   * @property: any
    * ```
    */
-  a() {
-
-  }
+  property: any
 }
 
 // /**
