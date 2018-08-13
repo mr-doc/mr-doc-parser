@@ -2,52 +2,10 @@ import * as Parser from 'tree-sitter';
 import * as TypeScript from 'tree-sitter-typescript';
 import IParser from '../../interfaces/IParser';
 import IFile from '../../interfaces/IFile';
-import IResult from '../../interfaces/IResult';
-import CommentParser from '../../CommentParser';
-import IComment from '../../interfaces/IComment';
-import location, { Location } from '../../utils/location';
+import location from '../../utils/location';
 import match from '../../utils/match';
+import { NodeProperties, ClassNode, ClassBodyNode, ClassMethodNode, NodeContext } from './Node';
 
-interface NodeProperties {
-  exports: {
-    export: boolean,
-    default: boolean
-  }
-}
-
-export interface NodeContext extends Location {
-  text: string
-}
-
-export interface ClassNode {
-  class: {
-    comment: NodeContext,
-    context: NodeContext,
-    identifier: NodeContext,
-    heritage: NodeContext,
-    body: any[],
-    properties: Partial<NodeProperties & {
-      extends: boolean,
-      implements: boolean
-    }>
-  }
-}
-
-export interface ClassBodyNode {
-  methods: ClassMethodNode[],
-  properties: any[]
-}
-
-export interface ClassMethodNode {
-  identifier: NodeContext,
-  // Note: parameters contains '(' ... ')'
-  parameters: NodeContext[],
-  comment: NodeContext,
-  context: NodeContext,
-  type: string,
-  async: boolean,
-  private: boolean
-}
 
 /**
  * A class that parses JavaScript comments.
@@ -107,6 +65,8 @@ export default class TypeScriptParser implements IParser {
     }
   }
 
+  /* Export node */
+
   private visitExportStatement = (
     node: Parser.SyntaxNode,
     leadingComment: Parser.SyntaxNode
@@ -129,12 +89,12 @@ export default class TypeScriptParser implements IParser {
     });
   }
 
+  /* Class Node */
   private visitClass = (
     node: Parser.SyntaxNode,
     leadingComment: Parser.SyntaxNode,
     properties: Partial<NodeProperties>
   ): ClassNode => {
-    // console.log(node.children);
     let children = node.children;
     // Remove 'class' since we already know that
     children = children.slice(1);
@@ -249,8 +209,118 @@ export default class TypeScriptParser implements IParser {
     }
   }
 
+  /* Interface Node */
 
-  private visitNode = (node: Parser.SyntaxNode, leadingComment: Parser.SyntaxNode, properties: Partial<NodeProperties>) => {
+  private visitInterfaceNode = (node: Parser.SyntaxNode, leadingComment: Parser.SyntaxNode, properties: Partial<NodeProperties>) => {
+    let children = node.children;
+    // Remove 'interface' since we already know that
+    children = children.slice(1);
+    // Get the interface identifier
+    const interfaceIdentifier = this.getNodeContext(children[0]);
+    // Remove the identifier
+    children = children.slice(1);
+
+    const interfaceProperties = Object.assign({
+      // For consistency, we'll keep 'implements'
+      implements: false,
+      extends: false
+    }, properties);
+
+    let heritage = null;
+
+    // Determine whether the class extends or implements
+    if (match(children[0], 'class_heritage')) {
+      if (this.getNodeContext(children[0]).text.includes("extends")) {
+        interfaceProperties.extends = true;
+      }
+      // Store the heritage
+      heritage = this.getNodeContext(children[0].children[0])
+      // Remove the heritage node
+      children = children.slice(1);
+    }
+    // console.log(children[0].children);
+    let interfaceBody: any = children[0];
+    interfaceBody = this.visitObjectTypeNode(interfaceBody);
+    return {
+      interface: {
+        comment: this.getNodeContext(leadingComment),
+        context: this.getNodeContext(node),
+        identifier: interfaceIdentifier,
+        heritage,
+        body: interfaceBody,
+        properties: interfaceProperties
+      }
+    }
+  }
+
+
+  private visitObjectTypeNode = (node: Parser.SyntaxNode) => {
+    const methods = [];
+    const properties = [];
+
+    node.children.forEach(child => {
+      if (match(child, 'comment') && this.isCStyleComment(child)) {
+        const nextSibling = child.nextSibling;
+        if (nextSibling) {
+          switch (nextSibling.type) {
+            case 'method_signature':
+              methods.push(this.visitMethodSignature(nextSibling, child));
+              break;
+            default:
+              this.warnNotSupported(nextSibling);
+              break;
+          }
+        }
+      }
+    });
+
+    return {
+      methods,
+      properties
+    }
+  }
+
+  private visitMethodSignature = (
+    node: Parser.SyntaxNode,
+    leadingComment: Parser.SyntaxNode
+  ) => {
+    const identifer = node.children[0];
+    const call_signature = node.children[1];
+    let call_signature_children = call_signature.children;
+    let type_parameters = [];
+    
+    // Determine whether generics are used, such as myfunc<T>(...): T
+    if (call_signature_children[0].type === 'type_parameters') {
+      type_parameters = call_signature_children.map(this.getNodeContext.bind(this));
+      call_signature_children = call_signature_children.slice(1);
+    }
+
+    // Note: An interface can have required and optional parameters
+    // so we need to check later if a '?' exists
+    let parameters: any = call_signature_children[0].children
+      .map(this.getNodeContext.bind(this));
+    // Remove parameters
+    call_signature_children = call_signature_children.slice(1);
+
+    // Get the type annotation for the method signature 
+    let type_annotation: any = call_signature_children[0];
+    // Determine if it does exists
+    if (type_annotation && type_annotation.children[1]) {
+      type_annotation = this.getNodeContext(type_annotation.children[1]);
+    }
+    return {
+      identifier: this.getNodeContext(identifer),
+      parameters,
+      type_parameters,
+      type_annotation
+    }
+  }
+
+  private visitNode = (
+    node: Parser.SyntaxNode,
+    leadingComment: Parser.SyntaxNode,
+    properties: Partial<NodeProperties>
+  ) => {
     const context = this.getNodeContext(node);
     switch (node.type) {
       // Note: Export statemens may include 
@@ -259,10 +329,11 @@ export default class TypeScriptParser implements IParser {
       case 'class':
         return this.visitClass(node, leadingComment, properties);
       // TODO: Complete interfaces and functions
-      // case 'interface_declaration':
-      //   break;
+      case 'interface_declaration':
+        return this.visitInterfaceNode(node, leadingComment, properties);
+        break;
       // case 'function':
-        // break;
+      // break;
       case 'comment':
         // noop
         break;
@@ -276,6 +347,9 @@ export default class TypeScriptParser implements IParser {
         break;
     }
   }
+
+
+
   /* Helpers */
 
   private isCStyleComment(node: Parser.SyntaxNode) {

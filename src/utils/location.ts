@@ -1,17 +1,7 @@
 import * as Parser from 'tree-sitter';
+import { ILocation } from '../interfaces/ILocation';
 
-export interface Location {
-  position: {
-    start: number,
-    end: number,
-  }
-  location: {
-    row: { start: number, end: number },
-    column: { start: number, end: number }
-  }
-}
-
-export default function location(node: Parser.SyntaxNode): Location {
+export default function location(node: Parser.SyntaxNode): ILocation {
   return {
     position: {
       start: node.startIndex,

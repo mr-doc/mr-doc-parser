@@ -24,40 +24,46 @@ export default class A {
 
 // }
 
-/**
- * # API
- * 
- * ```
- * @export
- * @class C
- * ```
- */
-export class C extends A {
-  /**
-   * A property
-   * # API
-   * ```
-   * @property: any
-   * ```
-   */
-  private a() {
-
-  }
-}
-
 // /**
-//  * 
 //  * # API
-//  * ```
-//  * @interface B
 //  * 
-//  * @property propertyA: any
-//  * @property propertyB: any
-//  * @property propertyC: any
+//  * ```
+//  * @export
+//  * @class C
+//  * 
+//  * @property a: any - Description
+//  * @property b: any - Description
 //  * ```
 //  */
-// export interface D {
-//   propertyA
-//   propertyB
-//   propertyC
+// export class C extends A {
+//   a: any
+//   b: any
 // }
+
+/**
+ * 
+ * # API
+ * ```
+ * @interface B
+ * 
+ * @property propertyA: any
+ * @property propertyB: any
+ * @property propertyC: any
+ * ```
+ */
+export interface D {
+  propertyA
+  propertyB
+  propertyC
+  /**
+   * Description
+   * 
+   * ```xdoc 
+   * @method method
+   * @param x
+   * @param y
+   * @param z
+   * ```
+   */
+  method<T>(x, y, z?): Promise<T>
+}
