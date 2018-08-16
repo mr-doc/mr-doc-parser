@@ -1,7 +1,7 @@
 import * as Parser from 'tree-sitter';
-import { ILocation } from '../interfaces/ILocation';
+import TextRange from '../interfaces/TextRange';
 
-export default function location(node: Parser.SyntaxNode): ILocation {
+export default function range(node: Parser.SyntaxNode): TextRange {
   return {
     position: {
       start: node.startIndex,

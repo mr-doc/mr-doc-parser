@@ -1,5 +1,4 @@
 import IFile from './src/interfaces/IFile';
-import IResult from './src/interfaces/IResult';
 import ParserFactory from './src/ParserFactory';
 import IParser from './src/interfaces/IParser';
 import * as FS from 'fs';
@@ -20,7 +19,7 @@ export default class Parser implements IParser {
   constructor(file: IFile, options: any = {}) {
     this.parser = (new ParserFactory(file, options)).getParser();
   }
-  parse = (): IResult => {
+  parse = () => {
     return this.parser.parse()
   }
 }
@@ -34,4 +33,5 @@ const result = new Parser({
 }).parse();
 
 
-console.log(JSON.stringify(result, null, 2))
+// console.log(JSON.stringify(result, null, 2))
+// console.log(result);

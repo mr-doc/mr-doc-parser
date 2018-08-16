@@ -1,5 +1,13 @@
 import { SyntaxNode } from "tree-sitter";
 
-export default function match(node: SyntaxNode, type: string) {
+/**
+ * Determines whether a node is a certain type.
+ * ```
+ * @param node: SyntaxNode - The node to compare.
+ * @param type: string  - The node type to match.
+ * @return: boolean
+ * ```
+ */
+export default function match(node: SyntaxNode, type: string): boolean {
   return node.type === type;
 }

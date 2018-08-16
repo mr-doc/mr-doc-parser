@@ -1,69 +1,40 @@
+interface K {
+  /**
+   * @property prop1: string
+   */
+  prop1: string
+  /**
+   * @property prop2: string
+   */
+  prop2: string
+}
+
+class A {
+
+}
+class Z {
+
+}
 /**
+ * Description
  * # API
  * 
  * ```
- * @export
- * @class A
+ * @export default
+ * @class B <T extends K, L>
  * ```
  */
-export default class A {
+export default class B<T extends K, L> implements A, Z {
+  /**
+   * @property prop: string - description
+   */
+  private prop: (T & K) | T
+  /**
+   * Initialize the class
+   * 
+   */
   constructor() {
-    
+    // super()
   }
 }
 
-// /**
-//  * # API
-//  * 
-//  * ```
-//  * @export
-//  * @class B
-//  * ```
-//  */
-// export class B extends A {
-
-// }
-
-// /**
-//  * # API
-//  * 
-//  * ```
-//  * @export
-//  * @class C
-//  * 
-//  * @property a: any - Description
-//  * @property b: any - Description
-//  * ```
-//  */
-// export class C extends A {
-//   a: any
-//   b: any
-// }
-
-/**
- * 
- * # API
- * ```
- * @interface B
- * 
- * @property propertyA: any
- * @property propertyB: any
- * @property propertyC: any
- * ```
- */
-export interface D {
-  propertyA
-  propertyB
-  propertyC
-  /**
-   * Description
-   * 
-   * ```xdoc 
-   * @method method
-   * @param x
-   * @param y
-   * @param z
-   * ```
-   */
-  method<T>(x, y, z?): Promise<T>
-}

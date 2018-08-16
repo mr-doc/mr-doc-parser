@@ -1,5 +1,5 @@
 import IFile from "./IFile";
-import IResult from "./IResult";
+// import IResult from "./IResult";
 
 export default abstract class IParser {
   constructor(file: IFile, options: any) {
