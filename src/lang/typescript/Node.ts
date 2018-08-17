@@ -1,24 +1,38 @@
 import TextRange from "../../interfaces/TextRange";
 import { SyntaxNode } from "tree-sitter";
 import range from "../../utils/range";
+import xdoc from 'xdoc-parser';
+import { DocumentationNode } from 'xdoc-parser/src/XDocASTNode';
+import { RemarkNode } from 'xdoc-parser/src/XDocParser';
+
 
 export interface Node extends TextRange {
   text: string,
   properties?: Partial<NodeProperties>
+  xdoc?: {
+    markdown: RemarkNode,
+    documentation: Partial<DocumentationNode>
+  }
 }
 
 export function createNode(
   source: string, 
   node: SyntaxNode, 
-  properties?: Partial<NodeProperties>
+  properties?: Partial<NodeProperties>,
+  document?: boolean,
 ): Node {
-  return {
-    ...range(node),
-    text: source.substring(node.startIndex, node.endIndex),
-    properties
-  }
-}
 
+  let node_ = { ...range(node), text: source.substring(node.startIndex, node.endIndex) }
+
+  if (properties) {
+    node_ = Object.assign(node_, { properties })
+  }
+  
+  if (document) {
+    node_ = Object.assign(node_, { xdoc: xdoc(node_.text).parse() })
+  }
+  return node_;
+}
 
 export interface NodeProperties {
   exports: Partial<NodeExports>
@@ -34,29 +48,3 @@ export interface NodeInheritance {
   extends: boolean,
   implements: boolean
 }
-
-  // export interface ClassNode extends Node {
-  //   class: {
-  //     comment: Node,
-  //     context: Node,
-  //     identifier: Node,
-  //     heritage: Node,
-  //     body: any[]
-  //   }
-  // }
-
-  // export interface ClassBodyNode {
-  //   methods: ClassMethodNode[],
-  //   properties: any[]
-  // }
-
-  // export interface ClassMethodNode {
-  //   identifier: Node,
-  //   // Note: parameters contains '(' ... ')'
-  //   parameters: Node[],
-  //   comment: Node,
-  //   context: Node,
-  //   type: string,
-  //   async: boolean,
-  //   private: boolean
-  // }

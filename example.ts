@@ -17,12 +17,6 @@ class Z {
 }
 /**
  * Description
- * # API
- * 
- * ```
- * @export default
- * @class B <T extends K, L>
- * ```
  */
 export default class B<T extends K, L> implements A, Z {
   /**

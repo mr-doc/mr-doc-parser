@@ -6,6 +6,7 @@ import match from "../../../utils/match";
 import { isJavaDocComment } from "../../../utils/comment";
 import { visitMethodDefinition } from "./method_definition.visitor";
 import { visitPublicFieldDefinition } from "../public_field_definition.visitor";
+import { visitTypeIdentifier } from "./type.visitor";
 
 export function visitClass(
   source: string,
@@ -42,7 +43,7 @@ export function visitClass(
     heritage,
     body,
     properties,
-    comment: createNode(source, comment),
+    comment: createNode(source, comment, null, true),
     context: createNode(source, node)
   }
 }
@@ -58,9 +59,9 @@ export function visitClassHeritage(source: string, node: SyntaxNode) {
     heritage_type: heritage_type.type,
     context: createNode(source, node),
     // A heritage is either 'implements' or 'extends'
-    identifiers: heritage_clause_children
+    heritages: heritage_clause_children
       .filter(child => child.type === 'type_identifier')
-      .map(child => ({ type: 'identifier', context: createNode(source, child) }))
+      .map(child => visitTypeIdentifier(source, child))
   }
 }
 
@@ -76,19 +77,23 @@ export function visitClassBody(source: string, node: SyntaxNode) {
         if (nextSibling) {
           switch (nextSibling.type) {
             case 'method_definition':
-              return visitMethodDefinition(source, nextSibling);
+              methods.push(visitMethodDefinition(source, nextSibling, child));
+              break;
             case 'public_field_definition':
-              return visitPublicFieldDefinition(source, nextSibling);
+              properties.push(visitPublicFieldDefinition(source, nextSibling, child));
+              break;
             default:
               console.log(`[mr-doc::parser]: warning - '${nextSibling.type.replace(/[_]/g, ' ')}' is not supported yet.`)
               break;
           }
         }
       }
-    })
+    });
 
   return {
     type: 'class_body',
     context: createNode(source, node),
+    methods,
+    properties
   }
 }

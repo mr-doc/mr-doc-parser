@@ -18,7 +18,7 @@
   "homepage": "https://github.com/mr-doc/parser#readme",
   "devDependencies": {
     "@types/mocha": "^2.2.48",
-    "@types/node": "^8.10.25",
+    "@types/node": "^8.10.26",
     "chai": "^4.1.2",
     "mocha": "^4.1.0"
   },
@@ -32,6 +32,6 @@
     "tree-sitter": "^0.13.6",
     "tree-sitter-javascript": "^0.13.5",
     "tree-sitter-typescript": "^0.13.3",
-    "xdoc-parser": "^3.2.0"
+    "xdoc-parser": "^3.2.1"
   }
 }

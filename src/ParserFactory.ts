@@ -18,7 +18,6 @@ export default class ParserFactory {
       case 'js':
       case 'javascript':
         return new JavaScriptParser(this.file, this.options);
-        break;
       case 'ts':
       case 'typescript':
         return new TypeScriptParser(this.file, this.options);
