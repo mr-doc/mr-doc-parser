@@ -1,6 +1,5 @@
 import { SyntaxNode } from "tree-sitter";
-import { NodeProperties, createNode, NodeInheritance } from "../Node";
-import { text } from "../../../utils/text";
+import { NodeProperties, createNode } from "../Node";
 import visitTypeParameters from "./type_parameters.visitor";
 import match from "../../../utils/match";
 import { isJavaDocComment } from "../../../utils/comment";
@@ -27,7 +26,7 @@ export function visitClass(
       case 'class_body':
         return visitClassBody(source, child)
       default:
-        console.log(`[mr-doc::parser]: warning - '${node.type.replace(/[_]/g, ' ')}' is not supported yet.`)
+        console.log(`[mr-doc::parser]: info - '${node.type.replace(/[_]/g, ' ')}' is not supported yet.`)
         break;
     }
   });
@@ -83,7 +82,7 @@ export function visitClassBody(source: string, node: SyntaxNode) {
               properties.push(visitPublicFieldDefinition(source, nextSibling, child));
               break;
             default:
-              console.log(`[mr-doc::parser]: warning - '${nextSibling.type.replace(/[_]/g, ' ')}' is not supported yet.`)
+              console.log(`[mr-doc::parser]: info - '${nextSibling.type.replace(/[_]/g, ' ')}' is not supported yet.`)
               break;
           }
         }

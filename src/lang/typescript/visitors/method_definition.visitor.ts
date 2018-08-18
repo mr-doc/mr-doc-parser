@@ -2,17 +2,21 @@ import { SyntaxNode } from "tree-sitter";
 import match from "../../../utils/match";
 import { text } from "../../../utils/text";
 import { createNode } from "../Node";
-import visitTypeParameters from "./type_parameters.visitor";
-import { visitFormalParameters } from "./formal_parameters.visitor";
-import { visitType } from "./type.visitor";
+import { visitCallSignature } from "./call_signature.visitor";
 
 export function visitMethodDefinition(source: string, node: SyntaxNode, comment: SyntaxNode) {
   let method_definition = node.children;
   let accessibility = 'public',
+    isAsync = false,
     identifier,
     type_parameters,
     formal_parameters,
     type_annotation;
+
+  if (match(method_definition[0], 'async')) {
+    isAsync = true;
+    method_definition.shift();
+  }
   
   if (match(method_definition[0], 'accessibility_modifier')) {
     accessibility = text(source, method_definition.shift())
@@ -23,28 +27,18 @@ export function visitMethodDefinition(source: string, node: SyntaxNode, comment:
   }
 
   if (match(method_definition[0], 'call_signature')) {
-    let call_signature = method_definition.shift().children;
-
-    if (match(call_signature[0], 'type_parameters')) {
-      type_parameters = visitTypeParameters(source, call_signature.shift());
-    }
-
-    if (match(call_signature[0], 'formal_parameters')) {
-      formal_parameters = visitFormalParameters(source, call_signature.shift());
-    }
-
-    if (match(call_signature[0], 'type_annotation')) {
-      let type = call_signature.shift().children[1];
-      type_annotation = visitType(source, type);
-    }
-    
+    const call_signature = visitCallSignature(source, method_definition.shift())
+    type_parameters = call_signature.type_parameters;
+    formal_parameters = call_signature.formal_parameters;
+    type_annotation = call_signature.type_annotation;
   }
   return {
     type: 'method',
     context: createNode(source, node),
     comment: createNode(source, node, null, true),
-    identifier,
     accessibility,
+    async: isAsync, 
+    identifier,
     type_parameters,
     formal_parameters,
     type_annotation

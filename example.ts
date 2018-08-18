@@ -1,9 +1,5 @@
-interface A {
 
-}
 /**
- * 
+ * Description
  */
-function a<T, K extends A>(params: K): T | K {
-  return
-}
+export const REGEX = 2;
