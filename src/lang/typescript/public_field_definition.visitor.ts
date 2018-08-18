@@ -11,17 +11,15 @@ export function visitPublicFieldDefinition(source: string, node: SyntaxNode, com
     type_annotation;
 
   if (match(public_field_definition[0], 'accessibility_modifier')) {
-    accessibility = text(source, public_field_definition[0]);
-    public_field_definition.shift();
+    accessibility = text(source, public_field_definition.shift());
   }
 
   if (match(public_field_definition[0], 'property_identifier')) {
-    identifier = text(source, public_field_definition[0]);
-    public_field_definition.shift();
+    identifier = createNode(source, public_field_definition.shift());
   }
 
   if (match(public_field_definition[0], 'type_annotation')) {
-    let type = public_field_definition[0].children[1];
+    let type = public_field_definition.shift().children[1];
     type_annotation = visitType(source, type);
   }
   return {

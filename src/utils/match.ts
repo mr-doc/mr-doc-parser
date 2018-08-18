@@ -9,5 +9,5 @@ import { SyntaxNode } from "tree-sitter";
  * ```
  */
 export default function match(node: SyntaxNode, type: string): boolean {
-  return node.type === type;
+  return node && node.type === type;
 }

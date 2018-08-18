@@ -3,10 +3,10 @@ import { createNode } from "../Node";
 
 export default function visitTypeParameters(source: string, node: SyntaxNode) {
   return {
-    type: 'type_parameters',
+    type: node.type,
     context: createNode(source, node),
     parameters: node.children
       .filter(child => !child.type.match(/[<>,]/))
-      .map(child => ({ type: 'parameter', context: createNode(source, child) }))
+      .map(child => ({ type: child.type, context: createNode(source, child) }))
   }
 }

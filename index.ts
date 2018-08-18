@@ -4,13 +4,22 @@ import IParser from './src/interfaces/IParser';
 import * as FS from 'fs';
 
 /**
- * A class that parses a source code and generates
+ * A class that parses a source code and generates an AST.
  * 
- * # API
- * 
- * ```
  * @class Parser
  * @implements IParser
+ * 
+ * # Example
+ * 
+ * ```js
+ * const parser = new Parser({
+ *  name: '...',
+ *  path: '....',
+ *  text: '...'
+ * }, { language: 'typescript' });
+ * 
+ * const result = parser.parse();
+ * 
  * ```
  */
 export default class Parser implements IParser {
@@ -34,4 +43,4 @@ const result = new Parser({
 
 
 // console.log(JSON.stringify(result, null, 2))
-// console.log(result);
+console.log(result);
