@@ -1,9 +1,10 @@
-import { SyntaxNode } from "tree-sitter";
-import match from "../../../utils/match";
-import { visitNode } from "./node.visitor";
 import { isJavaDocComment, isLegalComment } from "../../../utils/comment";
+import { SyntaxNode } from "tree-sitter";
+import { visitNode } from "./node.visitor";
+import IFile from "../../../interfaces/IFile";
+import match from "../../../utils/match";
 
-export function visitProgram(source: string, node: SyntaxNode) {
+export function visitProgram(source: IFile, node: SyntaxNode) {
   let children = node.children;
   if (node.children.length > 0) {
     if (isLegalComment(source, node.children[0])) {

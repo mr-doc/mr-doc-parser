@@ -29,6 +29,7 @@
     "babel-traverse": "^6.7.6",
     "babylon": "^6.7.0",
     "lodash": "^4.17.10",
+    "mr-doc-utils": "github:iwatakeshi/mr-doc-utils",
     "tree-sitter": "^0.13.6",
     "tree-sitter-javascript": "^0.13.5",
     "tree-sitter-typescript": "^0.13.3",

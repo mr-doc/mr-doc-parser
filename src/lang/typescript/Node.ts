@@ -4,6 +4,7 @@ import range from "../../utils/range";
 import xdoc from 'xdoc-parser';
 import { DocumentationNode } from 'xdoc-parser/src/XDocASTNode';
 import { RemarkNode } from 'xdoc-parser/src/XDocParser';
+import IFile from "../../interfaces/IFile";
 
 
 export interface Node extends TextRange {
@@ -16,13 +17,13 @@ export interface Node extends TextRange {
 }
 
 export function createNode(
-  source: string, 
+  file: IFile, 
   node: SyntaxNode, 
   properties?: Partial<NodeProperties>,
   document?: boolean,
 ): Node {
 
-  let node_ = { ...range(node), text: source.substring(node.startIndex, node.endIndex) }
+  let node_ = { ...range(node), text: file.text.substring(node.startIndex, node.endIndex) }
 
   if (properties) {
     node_ = Object.assign(node_, { properties })

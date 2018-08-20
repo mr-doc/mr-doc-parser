@@ -4,11 +4,13 @@ import visitTypeParameters from "./type_parameters.visitor";
 import match from "../../../utils/match";
 import { isJavaDocComment } from "../../../utils/comment";
 import { visitMethodDefinition } from "./method_definition.visitor";
-import { visitPublicFieldDefinition } from "../public_field_definition.visitor";
+import { visitPublicFieldDefinition } from "./public_field_definition.visitor";
 import { visitTypeIdentifier } from "./type.visitor";
+import IFile from "../../../interfaces/IFile";
+import log, { ErrorType } from "../../../utils/log";
 
 export function visitClass(
-  source: string,
+  source: IFile,
   node: SyntaxNode,
   comment: SyntaxNode,
   properties?: Partial<NodeProperties>
@@ -47,7 +49,7 @@ export function visitClass(
   }
 }
 
-export function visitClassHeritage(source: string, node: SyntaxNode) {
+export function visitClassHeritage(source: IFile, node: SyntaxNode) {
   let heritage_clause = node.children.shift();
   let heritage_clause_children = heritage_clause.children;
   // Remove the heritage type ('implements' or 'extends')
@@ -64,7 +66,7 @@ export function visitClassHeritage(source: string, node: SyntaxNode) {
   }
 }
 
-export function visitClassBody(source: string, node: SyntaxNode) {
+export function visitClassBody(source: IFile, node: SyntaxNode) {
 
   const methods = []
   const properties = []
@@ -82,7 +84,7 @@ export function visitClassBody(source: string, node: SyntaxNode) {
               properties.push(visitPublicFieldDefinition(source, nextSibling, child));
               break;
             default:
-              console.log(`[mr-doc::parser]: info - '${nextSibling.type.replace(/[_]/g, ' ')}' is not supported yet.`)
+              log.report(source, nextSibling, ErrorType.NodeTypeNotSupported);
               break;
           }
         }

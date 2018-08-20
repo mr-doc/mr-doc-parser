@@ -29,7 +29,7 @@ export default class TypeScriptParser implements IParser {
   parse = () => {
     const tree = this.parser.parse(this.file.text);
     if (tree.rootNode.type === "program") {
-      return visitProgram(this.file.text, tree.rootNode)
+      return visitProgram(this.file, tree.rootNode)
     }
   }
 }

@@ -1,10 +1,11 @@
-import { SyntaxNode } from "tree-sitter";
 import { createNode } from "../Node";
-import match from "../../../utils/match";
+import { SyntaxNode } from "tree-sitter";
 import { text } from "../../../utils/text";
 import { visitType } from "./type.visitor";
+import IFile from "../../../interfaces/IFile";
+import match from "../../../utils/match";
 
-export function visitFormalParameters(source: string, node: SyntaxNode) {
+export function visitFormalParameters(source: IFile, node: SyntaxNode) {
   return {
     type: node.type,
     context: createNode(source, node),
@@ -15,7 +16,7 @@ export function visitFormalParameters(source: string, node: SyntaxNode) {
 }
 
 
-export function visitRequiredParameter(source: string, node: SyntaxNode) {
+export function visitRequiredParameter(source: IFile, node: SyntaxNode) {
   let required_parameter = node.children,
     identifier,
     type_annotation;

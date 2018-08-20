@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Returns the context string
+ *
+ * # API
+ *
+ * @param source: IFile - The source file.
+ * @param node: SyntaxNode - The syntax node.
+ */
+function text(source, node) {
+    return source.text.substring(node.startIndex, node.endIndex);
+}
+exports.text = text;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGV4dC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91dGlscy90ZXh0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBR0E7Ozs7Ozs7R0FPRztBQUNILFNBQWdCLElBQUksQ0FBQyxNQUFhLEVBQUUsSUFBZ0I7SUFDbEQsT0FBTyxNQUFNLENBQUMsSUFBSSxDQUFDLFNBQVMsQ0FBQyxJQUFJLENBQUMsVUFBVSxFQUFFLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQztBQUMvRCxDQUFDO0FBRkQsb0JBRUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBTeW50YXhOb2RlIH0gZnJvbSBcInRyZWUtc2l0dGVyXCI7XHJcbmltcG9ydCBJRmlsZSBmcm9tIFwiLi4vaW50ZXJmYWNlcy9JRmlsZVwiO1xyXG5cclxuLyoqXHJcbiAqIFJldHVybnMgdGhlIGNvbnRleHQgc3RyaW5nXHJcbiAqIFxyXG4gKiAjIEFQSVxyXG4gKiBcclxuICogQHBhcmFtIHNvdXJjZTogSUZpbGUgLSBUaGUgc291cmNlIGZpbGUuXHJcbiAqIEBwYXJhbSBub2RlOiBTeW50YXhOb2RlIC0gVGhlIHN5bnRheCBub2RlLlxyXG4gKi9cclxuZXhwb3J0IGZ1bmN0aW9uIHRleHQoc291cmNlOiBJRmlsZSwgbm9kZTogU3ludGF4Tm9kZSkge1xyXG4gIHJldHVybiBzb3VyY2UudGV4dC5zdWJzdHJpbmcobm9kZS5zdGFydEluZGV4LCBub2RlLmVuZEluZGV4KTtcclxufSJdfQ==

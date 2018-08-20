@@ -1,18 +1,26 @@
 import IFile from './src/interfaces/IFile';
-import IResult from './src/interfaces/IResult';
 import IParser from './src/interfaces/IParser';
 /**
- * A class that parses a source code and generates
+ * A class that parses a source code and generates an AST.
  *
- * # API
- *
- * ```
  * @class Parser
  * @implements IParser
+ *
+ * # Example
+ *
+ * ```js
+ * const parser = new Parser({
+ *  name: '...',
+ *  path: '....',
+ *  text: '...'
+ * }, { language: 'typescript' });
+ *
+ * const result = parser.parse();
+ *
  * ```
  */
 export default class Parser implements IParser {
     private parser;
     constructor(file: IFile, options?: any);
-    parse: () => IResult;
+    parse: () => any;
 }
