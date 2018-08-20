@@ -1,11 +1,11 @@
 import { SyntaxNode } from "tree-sitter";
-import match from "../../../utils/match";
-import visitTypeParameters from "./type_parameters.visitor";
 import { visitFormalParameters } from "./formal_parameters.visitor";
 import { visitType } from "./type.visitor";
-import IFile from "../../../interfaces/IFile";
+import Source from "../../../interfaces/Source";
+import match from "../../../utils/match";
+import visitTypeParameters from "./type_parameters.visitor";
 
-export function visitCallSignature(source: IFile, node: SyntaxNode) {
+export function visitCallSignature(source: Source, node: SyntaxNode) {
 
     let call_signature = node.children,
     type_parameters,

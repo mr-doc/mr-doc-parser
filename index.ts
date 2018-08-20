@@ -1,4 +1,4 @@
-import IFile from './src/interfaces/IFile';
+import Source from './src/interfaces/Source';
 import ParserFactory from './src/ParserFactory';
 import IParser from './src/interfaces/IParser';
 import * as FS from 'fs';
@@ -25,7 +25,7 @@ import * as FS from 'fs';
 export default class Parser implements IParser {
 
   private parser: IParser;
-  constructor(file: IFile, options: any = {}) {
+  constructor(file: Source, options: any = {}) {
     this.parser = (new ParserFactory(file, options)).getParser();
   }
   parse = () => {

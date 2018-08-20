@@ -1,12 +1,12 @@
 import { SyntaxNode } from "tree-sitter";
 import { NodeProperties } from "../Node";
-import IFile from "../../../interfaces/IFile";
+import Source from "../../../interfaces/Source";
 import log, { ErrorType } from "../../../utils/log";
 
 
 
 export function visitDeclaration(
-    source: IFile,
+    source: Source,
     node: SyntaxNode,
     comment: SyntaxNode,
     properties: Partial<NodeProperties>
@@ -23,7 +23,7 @@ export function visitDeclaration(
 }
 
 export function visitInterfaceDeclaration(
-    source: IFile,
+    source: Source,
     node: SyntaxNode,
     comment: SyntaxNode,
     properties: Partial<NodeProperties>
@@ -33,7 +33,7 @@ export function visitInterfaceDeclaration(
 }
 
 export function visitLexicalDeclaration(
-    source: IFile,
+    source: Source,
     node: SyntaxNode,
     comment: SyntaxNode,
     properties: Partial<NodeProperties>

@@ -1,16 +1,14 @@
-import { SyntaxNode } from "tree-sitter";
 import { NodeProperties } from "../Node";
+import { SyntaxNode } from "tree-sitter";
 import { visitClass } from "./class.visitor";
-import range from "../../../utils/range";
+import { visitDeclaration } from "./declaration.visitor";
 import { visitFunction } from "./function.visitor";
+import { visitStatement } from "./statement.visitor";
+import Source from "../../../interfaces/Source";
 import log, { ErrorType } from '../../../utils/log';
 
-import { visitInterfaceDeclaration, visitDeclaration } from "./declaration.visitor";
-import { visitStatement } from "./statement.visitor";
-import IFile from "../../../interfaces/IFile";
-
 export function visitNode(
-  source: IFile,
+  source: Source,
   node: SyntaxNode,
   comment: SyntaxNode,
   properties: Partial<NodeProperties>

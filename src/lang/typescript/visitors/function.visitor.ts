@@ -1,11 +1,11 @@
-import { SyntaxNode } from "tree-sitter";
 import { NodeProperties, createNode } from "../Node";
-import match from "../../../utils/match";
+import { SyntaxNode } from "tree-sitter";
 import { visitCallSignature } from "./call_signature.visitor";
-import IFile from "../../../interfaces/IFile";
+import Source from "../../../interfaces/Source";
+import match from "../../../utils/match";
 
 export function visitFunction(
-    source: IFile,
+    source: Source,
     node: SyntaxNode,
     comment: SyntaxNode,
     properties: Partial<NodeProperties>

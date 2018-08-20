@@ -2,10 +2,10 @@ import { createNode } from "../Node";
 import { SyntaxNode } from "tree-sitter";
 import { text } from "../../../utils/text";
 import { visitCallSignature } from "./call_signature.visitor";
-import IFile from "../../../interfaces/IFile";
+import Source from "../../../interfaces/Source";
 import match from "../../../utils/match";
 
-export function visitMethodDefinition(source: IFile, node: SyntaxNode, comment: SyntaxNode) {
+export function visitMethodDefinition(source: Source, node: SyntaxNode, comment: SyntaxNode) {
   let method_definition = node.children;
   let accessibility = 'public',
     isAsync = false,

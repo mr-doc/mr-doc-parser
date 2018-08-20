@@ -1,10 +1,10 @@
 import { SyntaxNode } from "tree-sitter";
 import match from "./match";
-import IFile from "../interfaces/IFile";
+import Source from "../interfaces/Source";
 
 export const XDocRegex = /@(\w+)([^{[(\n]*)?([\{\[\(][\s\S]*[\}\]\)]([\s]*(=|-)>.*)?)?([\s]*-(.)*)?/gmi;
 
-export function isLegalComment (source: IFile, node: SyntaxNode) {
+export function isLegalComment (source: Source, node: SyntaxNode) {
   const possibleTexts = [
     'copyright',
     'terms and conditions',
@@ -21,7 +21,7 @@ export function isLegalComment (source: IFile, node: SyntaxNode) {
   }
 }
 
-export function isJavaDocComment(source: IFile, node: SyntaxNode) {
+export function isJavaDocComment(source: Source, node: SyntaxNode) {
   const comment = source.text.substring(node.startIndex, node.endIndex);
   // regexr.com/3ejvb
   return /(\/\*\*)((\s*)(.*?)(\s))*(\*\/)/.test(comment)

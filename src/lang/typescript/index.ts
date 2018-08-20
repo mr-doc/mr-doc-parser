@@ -1,7 +1,7 @@
 import * as Parser from 'tree-sitter';
 import * as TypeScript from 'tree-sitter-typescript';
 import IParser from '../../interfaces/IParser';
-import IFile from '../../interfaces/IFile';
+import Source from '../../interfaces/Source';
 import { visitProgram } from './visitors/program.visitor';
 
 
@@ -17,10 +17,10 @@ import { visitProgram } from './visitors/program.visitor';
  * ```
  */
 export default class TypeScriptParser implements IParser {
-  private file: IFile;
+  private file: Source;
   private options: any;
   private parser: Parser;
-  constructor(file: IFile, options: any) {
+  constructor(file: Source, options: any) {
     this.file = file;
     Object.assign(this.options = {}, options || {});
     this.parser = new Parser();

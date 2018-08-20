@@ -1,11 +1,11 @@
+import { createNode } from "../Node";
 import { SyntaxNode } from "tree-sitter";
-import match from "../../../utils/match";
 import { text } from "../../../utils/text";
 import { visitType } from "./type.visitor";
-import { createNode } from "../Node";
-import IFile from "../../../interfaces/IFile";
+import Source from "../../../interfaces/Source";
+import match from "../../../utils/match";
 
-export function visitPublicFieldDefinition(source: IFile, node: SyntaxNode, comment: SyntaxNode) {
+export function visitPublicFieldDefinition(source: Source, node: SyntaxNode, comment: SyntaxNode) {
   let public_field_definition = node.children;
   let accessibility = 'public',
     identifier,

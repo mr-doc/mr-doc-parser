@@ -1,5 +1,5 @@
 import { SyntaxNode } from "tree-sitter";
-import IFile from "../interfaces/IFile";
+import Source from "../interfaces/Source";
 
 /**
  * Returns the context string
@@ -9,6 +9,6 @@ import IFile from "../interfaces/IFile";
  * @param source: IFile - The source file.
  * @param node: SyntaxNode - The syntax node.
  */
-export function text(source: IFile, node: SyntaxNode) {
+export function text(source: Source, node: SyntaxNode) {
   return source.text.substring(node.startIndex, node.endIndex);
 }

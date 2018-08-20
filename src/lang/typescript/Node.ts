@@ -4,7 +4,7 @@ import range from "../../utils/range";
 import xdoc from 'xdoc-parser';
 import { DocumentationNode } from 'xdoc-parser/src/XDocASTNode';
 import { RemarkNode } from 'xdoc-parser/src/XDocParser';
-import IFile from "../../interfaces/IFile";
+import Source from "../../interfaces/Source";
 
 
 export interface Node extends TextRange {
@@ -17,7 +17,7 @@ export interface Node extends TextRange {
 }
 
 export function createNode(
-  file: IFile, 
+  file: Source, 
   node: SyntaxNode, 
   properties?: Partial<NodeProperties>,
   document?: boolean,

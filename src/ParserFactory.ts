@@ -1,14 +1,14 @@
-import IFile from "./interfaces/IFile";
+import Source from "./interfaces/Source";
 import IParser from "./interfaces/IParser";
 import JavaScriptParser from "./lang/javascript";
 import TypeScriptParser from './lang/typescript';
 
 export default class ParserFactory {
-  private file: IFile
+  private file: Source
   private options = {
     language: 'JavaScript'
   }
-  constructor(file: IFile, options: any = {}) {
+  constructor(file: Source, options: any = {}) {
     this.file = file;
     Object.assign(this.options, options)
   }

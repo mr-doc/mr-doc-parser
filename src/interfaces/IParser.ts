@@ -1,8 +1,8 @@
-import IFile from "./IFile";
+import Source from "./Source";
 // import IResult from "./IResult";
 
 export default abstract class IParser {
-  constructor(file: IFile, options: any) {
+  constructor(file: Source, options: any) {
 
   }
   abstract parse(): any

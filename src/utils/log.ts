@@ -1,5 +1,5 @@
 import { Log } from 'mr-doc-utils';
-import IFile from '../interfaces/IFile';
+import Source from '../interfaces/Source';
 import { SyntaxNode } from 'tree-sitter';
 import range from './range';
 
@@ -9,7 +9,7 @@ export enum ErrorType {
 }
 
 class ParserLog extends Log {
-    report = (source: IFile, node: SyntaxNode, error: ErrorType): void => {
+    report = (source: Source, node: SyntaxNode, error: ErrorType): void => {
         const location = range(node).location;
         const sameLine = location.row.start === location.row.end;
         const getRange = () => sameLine ? location.row.start + 1 : location.row.start + 1 + ' - ' + location.row.end + 1;

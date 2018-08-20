@@ -1,7 +1,7 @@
 import * as Parser from 'tree-sitter';
 import * as JavaScript from 'tree-sitter-javascript';
 import IParser from '../../interfaces/IParser';
-import IFile from '../../interfaces/IFile';
+import Source from '../../interfaces/Source';
 // import IResult from '../../interfaces/IResult';
 // import IComment from '../../interfaces/IComment';
 
@@ -17,10 +17,10 @@ import IFile from '../../interfaces/IFile';
  * ```
  */
 export default class JavaScriptParser implements IParser {
-  private file: IFile;
+  private file: Source;
   private options: any;
   private parser: Parser;
-  constructor(file: IFile, options: any) {
+  constructor(file: Source, options: any) {
     this.file = file;
     Object.assign(this.options = {}, options || {});
     this.parser = new Parser();

@@ -1,16 +1,17 @@
-import { SyntaxNode } from "tree-sitter";
 import { createNode } from "../Node";
+import { SyntaxNode } from "tree-sitter";
 import { visitTypeArguments } from "./type_arguments.visitor";
-import IFile from "../../../interfaces/IFile";
+import Source from "../../../interfaces/Source";
+import log, { ErrorType } from "../../../utils/log";
 
-export function visitTypeOrTypeIdentifier(source: IFile, node: SyntaxNode) {
+export function visitTypeOrTypeIdentifier(source: Source, node: SyntaxNode) {
   if (node.type === 'type_identifier') {
     return visitTypeIdentifier(source, node)
   }
   return visitType(source, node);
 }
 
-export function visitType(source: IFile, node: SyntaxNode) {
+export function visitType(source: Source, node: SyntaxNode) {
   switch (node.type) {
     case 'union_type':
       return visitUnionType(source, node);
@@ -25,19 +26,19 @@ export function visitType(source: IFile, node: SyntaxNode) {
     case 'predefined_type':
       return visitPredefinedType(source, node);
     default:
-    console.log(`[mr-doc::parser]: info - '${node.type.replace(/[_]/g, ' ')}' is not supported yet.`);
+    log.report(source, node, ErrorType.NodeTypeNotSupported);
     break;
   }
 }
 
-export function visitTypeIdentifier(source: IFile, node: SyntaxNode) {
+export function visitTypeIdentifier(source: Source, node: SyntaxNode) {
   return {
     type: node.type,
     context: createNode(source, node)
   }
 }
 
-export function visitUnionType(source: IFile, node: SyntaxNode) {
+export function visitUnionType(source: Source, node: SyntaxNode) {
   const union = node.children;
   return {
     type: node.type,
@@ -47,7 +48,7 @@ export function visitUnionType(source: IFile, node: SyntaxNode) {
   }
 }
 
-export function visitIntersectionType(source: IFile, node: SyntaxNode) {
+export function visitIntersectionType(source: Source, node: SyntaxNode) {
   const intersect = node.children;
   return {
     type: node.type,
@@ -57,7 +58,7 @@ export function visitIntersectionType(source: IFile, node: SyntaxNode) {
   }
 }
 
-export function visitParenthesizedType(source: IFile, node: SyntaxNode) {
+export function visitParenthesizedType(source: Source, node: SyntaxNode) {
   return {
     type: node.type,
     context: createNode(source, node),
@@ -65,7 +66,7 @@ export function visitParenthesizedType(source: IFile, node: SyntaxNode) {
   }
 }
 
-export function visitGenericType(source: IFile, node: SyntaxNode) {
+export function visitGenericType(source: Source, node: SyntaxNode) {
   let children = node.children;
   return {
     type: node.type,
@@ -75,7 +76,7 @@ export function visitGenericType(source: IFile, node: SyntaxNode) {
   }
 }
 
-export function visitPredefinedType(source: IFile, node: SyntaxNode) {
+export function visitPredefinedType(source: Source, node: SyntaxNode) {
   return {
     type: node.type,
     context: createNode(source, node.children.shift()),

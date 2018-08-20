@@ -1,16 +1,16 @@
-import { SyntaxNode } from "tree-sitter";
-import { NodeProperties, createNode } from "../Node";
-import visitTypeParameters from "./type_parameters.visitor";
-import match from "../../../utils/match";
 import { isJavaDocComment } from "../../../utils/comment";
+import { NodeProperties, createNode } from "../Node";
+import { SyntaxNode } from "tree-sitter";
 import { visitMethodDefinition } from "./method_definition.visitor";
 import { visitPublicFieldDefinition } from "./public_field_definition.visitor";
 import { visitTypeIdentifier } from "./type.visitor";
-import IFile from "../../../interfaces/IFile";
+import Source from "../../../interfaces/Source";
 import log, { ErrorType } from "../../../utils/log";
+import match from "../../../utils/match";
+import visitTypeParameters from "./type_parameters.visitor";
 
 export function visitClass(
-  source: IFile,
+  source: Source,
   node: SyntaxNode,
   comment: SyntaxNode,
   properties?: Partial<NodeProperties>
@@ -49,7 +49,7 @@ export function visitClass(
   }
 }
 
-export function visitClassHeritage(source: IFile, node: SyntaxNode) {
+export function visitClassHeritage(source: Source, node: SyntaxNode) {
   let heritage_clause = node.children.shift();
   let heritage_clause_children = heritage_clause.children;
   // Remove the heritage type ('implements' or 'extends')
@@ -66,7 +66,7 @@ export function visitClassHeritage(source: IFile, node: SyntaxNode) {
   }
 }
 
-export function visitClassBody(source: IFile, node: SyntaxNode) {
+export function visitClassBody(source: Source, node: SyntaxNode) {
 
   const methods = []
   const properties = []
