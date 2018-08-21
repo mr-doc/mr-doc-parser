@@ -2,8 +2,8 @@ import * as Parser from 'tree-sitter';
 import * as TypeScript from 'tree-sitter-typescript';
 import IParser from '../../interfaces/IParser';
 import Source from '../../interfaces/Source';
-import { visitProgram } from './visitors/program.visitor';
-import { walk } from './walk';
+import walk from './walk';
+import { TypeScriptVisitor } from './visitors/visitor';
 
 
 /**
@@ -18,20 +18,21 @@ import { walk } from './walk';
  * ```
  */
 export default class TypeScriptParser implements IParser {
-  private file: Source;
+  private source: Source;
   private options: any;
   private parser: Parser;
   constructor(file: Source, options: any) {
-    this.file = file;
+    this.source = file;
     Object.assign(this.options = {}, options || {});
     this.parser = new Parser();
     this.parser.setLanguage(TypeScript);
   }
   parse = () => {
-    const tree = this.parser.parse(this.file.text);
+    const tree = this.parser.parse(this.source.text);
     if (tree.rootNode.type === "program") {
-      walk(tree.rootNode);
-      // return visitProgram(this.file, tree.rootNode)
+      const visitor = new TypeScriptVisitor(this.source);
+      walk(tree.rootNode).visit(visitor);
+      return visitor.getAST();
     }
   }
 }

@@ -12,9 +12,9 @@ import Source from '../../interfaces/Source';
  * ```
  */
 export default class TypeScriptParser implements IParser {
-    private file;
+    private source;
     private options;
     private parser;
     constructor(file: Source, options: any);
-    parse: () => any[];
+    parse: () => object[];
 }

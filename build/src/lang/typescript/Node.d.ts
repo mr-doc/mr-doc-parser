@@ -1,17 +1,17 @@
-import TextRange from "../../interfaces/TextRange";
-import { SyntaxNode } from "tree-sitter";
 import { DocumentationNode } from 'xdoc-parser/src/XDocASTNode';
 import { RemarkNode } from 'xdoc-parser/src/XDocParser';
+import { SyntaxNode } from "tree-sitter";
 import Source from "../../interfaces/Source";
-export interface Node extends TextRange {
+import TextRange from "../../interfaces/TextRange";
+export interface ASTNode extends TextRange {
     text: string;
-    properties?: Partial<NodeProperties>;
-    xdoc?: {
+    properties?: any;
+    comment?: {
         markdown: RemarkNode;
         documentation: Partial<DocumentationNode>;
     };
 }
-export declare function createNode(file: Source, node: SyntaxNode, properties?: Partial<NodeProperties>, document?: boolean): Node;
+export declare function createASTNode(source: Source, node: SyntaxNode, document?: boolean): ASTNode;
 export interface NodeProperties {
     exports: Partial<NodeExports>;
     inheritance: Partial<NodeInheritance>;

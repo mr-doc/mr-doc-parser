@@ -8,30 +8,25 @@ import TextRange from "../../interfaces/TextRange";
 import xdoc from 'xdoc-parser';
 
 
-export interface Node extends TextRange {
+export interface ASTNode extends TextRange {
   text: string,
-  properties?: Partial<NodeProperties>
-  xdoc?: {
+  properties?: any
+  comment?: {
     markdown: RemarkNode,
     documentation: Partial<DocumentationNode>
   }
 }
 
-export function createNode(
-  file: Source, 
+export function createASTNode(
+  source: Source, 
   node: SyntaxNode, 
-  properties?: Partial<NodeProperties>,
   document?: boolean,
-): Node {
+): ASTNode {
 
-  let node_ = { ...range(node), text: text(file, node) }
+  let node_ = { ...range(node), text: text(source, node) }
 
-  if (properties) {
-    node_ = Object.assign(node_, { properties })
-  }
-  
   if (document) {
-    node_ = Object.assign(node_, { xdoc: xdoc(node_.text).parse() })
+    node_ = Object.assign(node_, { comment: xdoc(node_.text).parse() })
   }
   return node_;
 }
