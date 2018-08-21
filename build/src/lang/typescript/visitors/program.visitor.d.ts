@@ -1,3 +1,3 @@
 import { SyntaxNode } from "tree-sitter";
-import IFile from "../../../interfaces/IFile";
-export declare function visitProgram(source: IFile, node: SyntaxNode): any[];
+import Source from "../../../interfaces/Source";
+export declare function visitProgram(source: Source, node: SyntaxNode): any[];

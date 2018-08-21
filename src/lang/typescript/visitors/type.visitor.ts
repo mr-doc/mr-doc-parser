@@ -1,11 +1,16 @@
-import { createNode } from "../Node";
+import { createNode, NodeProperties } from "../node";
 import { SyntaxNode } from "tree-sitter";
-import { visitTypeArguments } from "./type_arguments.visitor";
 import Source from "../../../interfaces/Source";
 import log, { ErrorType } from "../../../utils/log";
+import match from "../../../utils/match";
+import { isJavaDocComment } from "../../../utils/comment";
+import { visitSignature } from "./signature.visitor";
+import { sibling } from "../../../utils/sibling";
+
+/* Type visitors */
 
 export function visitTypeOrTypeIdentifier(source: Source, node: SyntaxNode) {
-  if (node.type === 'type_identifier') {
+  if (match(node, 'type_identifier')) {
     return visitTypeIdentifier(source, node)
   }
   return visitType(source, node);
@@ -26,8 +31,8 @@ export function visitType(source: Source, node: SyntaxNode) {
     case 'predefined_type':
       return visitPredefinedType(source, node);
     default:
-    log.report(source, node, ErrorType.NodeTypeNotSupported);
-    break;
+      log.report(source, node, ErrorType.NodeTypeNotYetSupported);
+      break;
   }
 }
 
@@ -79,6 +84,52 @@ export function visitGenericType(source: Source, node: SyntaxNode) {
 export function visitPredefinedType(source: Source, node: SyntaxNode) {
   return {
     type: node.type,
-    context: createNode(source, node.children.shift()),
+    context: createNode(source, node),
   }
+}
+
+export function visitObjectType(
+  source: Source,
+  node: SyntaxNode,
+  comment?: SyntaxNode,
+  properties?: Partial<NodeProperties>
+) {
+  let children = node.children
+    .filter(child => !child.type.match(/[\{\},;]/));
+  let signatures = [];
+  console.log(children)
+  children.forEach(child => {
+    let nextSibiling = sibling(child, children);
+    if (match(child, 'comment') && isJavaDocComment(source, child) && nextSibiling) {
+      // console.log(createNode(source, nextSibiling).text);
+      // let signature = visitSignature(source, nextSibiling, child, properties);
+      // if (signature) {
+      //   signatures.push(signature)
+      // }
+    }
+  });
+  return {
+    type: node.type,
+    context: createNode(source, node),
+    signatures
+  }
+}
+
+
+/* Helpers */
+
+export default function visitTypeParameters(source: Source, node: SyntaxNode) {
+  return {
+    type: node.type,
+    context: createNode(source, node),
+    parameters: node.children
+      .filter(child => !child.type.match(/[<>,]/))
+      .map(child => ({ type: child.type, context: createNode(source, child) }))
+  }
+}
+
+export function visitTypeArguments(source: Source, node: SyntaxNode) {
+  return node.children
+    .filter(child => !child.type.match(/[<>,]/))
+    .map(child => visitType(source, child))
 }

@@ -1,6 +1,6 @@
 import { SyntaxNode } from "tree-sitter";
-import IFile from "../../../interfaces/IFile";
-export declare function visitCallSignature(source: IFile, node: SyntaxNode): {
+import Source from "../../../interfaces/Source";
+export declare function visitCallSignature(source: Source, node: SyntaxNode): {
     type_parameters: any;
     formal_parameters: any;
     type_annotation: any;

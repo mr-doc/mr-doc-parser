@@ -1,6 +1,5 @@
-import { createNode } from "../Node";
+import { createNode } from "../node";
 import { SyntaxNode } from "tree-sitter";
-import { text } from "../../../utils/text";
 import { visitType } from "./type.visitor";
 import Source from "../../../interfaces/Source";
 import match from "../../../utils/match";
@@ -23,7 +22,7 @@ export function visitRequiredParameter(source: Source, node: SyntaxNode) {
     
 
   if (match(required_parameter[0], 'identifier')) {
-    identifier = text(source, required_parameter.shift());
+    identifier = createNode(source, required_parameter.shift());
   }
 
   if(match(required_parameter[0], 'type_annotation')) {

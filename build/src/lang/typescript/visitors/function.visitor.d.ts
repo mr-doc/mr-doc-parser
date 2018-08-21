@@ -1,7 +1,7 @@
-import { SyntaxNode } from "tree-sitter";
 import { NodeProperties } from "../Node";
-import IFile from "../../../interfaces/IFile";
-export declare function visitFunction(source: IFile, node: SyntaxNode, comment: SyntaxNode, properties: Partial<NodeProperties>): {
+import { SyntaxNode } from "tree-sitter";
+import Source from "../../../interfaces/Source";
+export declare function visitFunction(source: Source, node: SyntaxNode, comment: SyntaxNode, properties: Partial<NodeProperties>): {
     type: string;
     context: import("../Node").Node;
     comment: import("../Node").Node;

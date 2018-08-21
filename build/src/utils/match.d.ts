@@ -7,4 +7,4 @@ import { SyntaxNode } from "tree-sitter";
  * @return: boolean
  * ```
  */
-export default function match(node: SyntaxNode, type: string): boolean;
+export default function match(node: SyntaxNode, ...types: string[]): boolean;

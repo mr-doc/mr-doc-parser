@@ -1,5 +1,5 @@
 import IParser from '../../interfaces/IParser';
-import IFile from '../../interfaces/IFile';
+import Source from '../../interfaces/Source';
 /**
  * A class that parses JavaScript comments.
  *
@@ -15,6 +15,6 @@ export default class JavaScriptParser implements IParser {
     private file;
     private options;
     private parser;
-    constructor(file: IFile, options: any);
+    constructor(file: Source, options: any);
     parse: () => void;
 }

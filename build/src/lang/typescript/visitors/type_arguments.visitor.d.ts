@@ -1,3 +1,3 @@
 import { SyntaxNode } from "tree-sitter";
-import IFile from "../../../interfaces/IFile";
-export declare function visitTypeArguments(source: IFile, node: SyntaxNode): any;
+import Source from "../../../interfaces/Source";
+export declare function visitTypeArguments(source: Source, node: SyntaxNode): any;

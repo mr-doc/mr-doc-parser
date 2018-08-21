@@ -1,6 +1,6 @@
 import { SyntaxNode } from "tree-sitter";
 import { NodeProperties } from "../Node";
-import IFile from "../../../interfaces/IFile";
-export declare function visitDeclaration(source: IFile, node: SyntaxNode, comment: SyntaxNode, properties: Partial<NodeProperties>): void;
-export declare function visitInterfaceDeclaration(source: IFile, node: SyntaxNode, comment: SyntaxNode, properties: Partial<NodeProperties>): void;
-export declare function visitLexicalDeclaration(source: IFile, node: SyntaxNode, comment: SyntaxNode, properties: Partial<NodeProperties>): void;
+import Source from "../../../interfaces/Source";
+export declare function visitDeclaration(source: Source, node: SyntaxNode, comment: SyntaxNode, properties: Partial<NodeProperties>): void;
+export declare function visitInterfaceDeclaration(source: Source, node: SyntaxNode, comment: SyntaxNode, properties: Partial<NodeProperties>): void;
+export declare function visitLexicalDeclaration(source: Source, node: SyntaxNode, comment: SyntaxNode, properties: Partial<NodeProperties>): void;

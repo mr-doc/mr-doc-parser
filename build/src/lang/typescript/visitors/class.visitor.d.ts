@@ -1,7 +1,7 @@
-import { SyntaxNode } from "tree-sitter";
 import { NodeProperties } from "../Node";
-import IFile from "../../../interfaces/IFile";
-export declare function visitClass(source: IFile, node: SyntaxNode, comment: SyntaxNode, properties?: Partial<NodeProperties>): {
+import { SyntaxNode } from "tree-sitter";
+import Source from "../../../interfaces/Source";
+export declare function visitClass(source: Source, node: SyntaxNode, comment: SyntaxNode, properties?: Partial<NodeProperties>): {
     type: string;
     identifier: import("../Node").Node;
     type_parameters: {
@@ -71,7 +71,7 @@ export declare function visitClass(source: IFile, node: SyntaxNode, comment: Syn
     comment: import("../Node").Node;
     context: import("../Node").Node;
 };
-export declare function visitClassHeritage(source: IFile, node: SyntaxNode): {
+export declare function visitClassHeritage(source: Source, node: SyntaxNode): {
     type: string;
     heritage_type: string;
     context: import("../Node").Node;
@@ -80,7 +80,7 @@ export declare function visitClassHeritage(source: IFile, node: SyntaxNode): {
         context: import("../Node").Node;
     }[];
 };
-export declare function visitClassBody(source: IFile, node: SyntaxNode): {
+export declare function visitClassBody(source: Source, node: SyntaxNode): {
     type: string;
     context: import("../Node").Node;
     methods: any[];

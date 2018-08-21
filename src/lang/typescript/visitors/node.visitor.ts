@@ -1,4 +1,4 @@
-import { NodeProperties } from "../Node";
+import { NodeProperties } from "../node";
 import { SyntaxNode } from "tree-sitter";
 import { visitClass } from "./class.visitor";
 import { visitDeclaration } from "./declaration.visitor";
@@ -33,7 +33,7 @@ export function visitNode(
         return visitDeclaration(source, node, comment, properties);
       }
       
-      log.report(source, node, ErrorType.NodeTypeNotSupported);
+      log.report(source, node, ErrorType.NodeTypeNotYetSupported);
       break;
   }
 }

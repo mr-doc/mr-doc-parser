@@ -1,5 +1,12 @@
 
+interface A {
+
+}
+
 /**
  * Description
  */
-export const REGEX = 2;
+interface B<T extends A, K> {
+  (x: string): void
+  func (x: string): void
+}

@@ -1,5 +1,5 @@
 import { SyntaxNode } from "tree-sitter";
-import IFile from "../interfaces/IFile";
+import Source from "../interfaces/Source";
 /**
  * Returns the context string
  *
@@ -8,4 +8,4 @@ import IFile from "../interfaces/IFile";
  * @param source: IFile - The source file.
  * @param node: SyntaxNode - The syntax node.
  */
-export declare function text(source: IFile, node: SyntaxNode): string;
+export declare function text(source: Source, node: SyntaxNode): string;

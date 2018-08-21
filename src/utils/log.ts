@@ -4,7 +4,7 @@ import { SyntaxNode } from 'tree-sitter';
 import range from './range';
 
 export enum ErrorType {
-    NodeTypeNotSupported,
+    NodeTypeNotYetSupported,
     TreeSitterParseError
 }
 
@@ -15,7 +15,7 @@ class ParserLog extends Log {
         const getRange = () => sameLine ? location.row.start + 1 : location.row.start + 1 + ' - ' + location.row.end + 1;
         const culprit = `Line${sameLine ? '' : 's'} ${getRange()} in '${source.path}${source.name}'`;
         switch (error) {
-            case ErrorType.NodeTypeNotSupported:
+            case ErrorType.NodeTypeNotYetSupported:
                 this.info(`'${node.type.replace(/[_]/g, ' ')}' is not yet supported:\n${culprit}`)
                 break;
             case ErrorType.TreeSitterParseError:

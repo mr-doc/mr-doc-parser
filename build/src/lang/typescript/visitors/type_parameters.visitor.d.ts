@@ -1,6 +1,6 @@
 import { SyntaxNode } from "tree-sitter";
-import IFile from "../../../interfaces/IFile";
-export default function visitTypeParameters(source: IFile, node: SyntaxNode): {
+import Source from "../../../interfaces/Source";
+export default function visitTypeParameters(source: Source, node: SyntaxNode): {
     type: string;
     context: import("../Node").Node;
     parameters: {

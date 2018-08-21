@@ -3,6 +3,7 @@ import * as TypeScript from 'tree-sitter-typescript';
 import IParser from '../../interfaces/IParser';
 import Source from '../../interfaces/Source';
 import { visitProgram } from './visitors/program.visitor';
+import { walk } from './walk';
 
 
 /**
@@ -29,7 +30,8 @@ export default class TypeScriptParser implements IParser {
   parse = () => {
     const tree = this.parser.parse(this.file.text);
     if (tree.rootNode.type === "program") {
-      return visitProgram(this.file, tree.rootNode)
+      walk(tree.rootNode);
+      // return visitProgram(this.file, tree.rootNode)
     }
   }
 }

@@ -1,4 +1,4 @@
-import IFile from './src/interfaces/IFile';
+import Source from './src/interfaces/Source';
 import IParser from './src/interfaces/IParser';
 /**
  * A class that parses a source code and generates an AST.
@@ -21,6 +21,6 @@ import IParser from './src/interfaces/IParser';
  */
 export default class Parser implements IParser {
     private parser;
-    constructor(file: IFile, options?: any);
+    constructor(file: Source, options?: any);
     parse: () => any;
 }

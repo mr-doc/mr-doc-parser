@@ -1,10 +1,11 @@
-import TextRange from "../../interfaces/TextRange";
-import { SyntaxNode } from "tree-sitter";
-import range from "../../utils/range";
-import xdoc from 'xdoc-parser';
 import { DocumentationNode } from 'xdoc-parser/src/XDocASTNode';
 import { RemarkNode } from 'xdoc-parser/src/XDocParser';
+import { SyntaxNode } from "tree-sitter";
+import { text } from "../../utils/text";
+import range from "../../utils/range";
 import Source from "../../interfaces/Source";
+import TextRange from "../../interfaces/TextRange";
+import xdoc from 'xdoc-parser';
 
 
 export interface Node extends TextRange {
@@ -23,7 +24,7 @@ export function createNode(
   document?: boolean,
 ): Node {
 
-  let node_ = { ...range(node), text: file.text.substring(node.startIndex, node.endIndex) }
+  let node_ = { ...range(node), text: text(file, node) }
 
   if (properties) {
     node_ = Object.assign(node_, { properties })

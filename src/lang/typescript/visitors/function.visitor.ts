@@ -1,8 +1,8 @@
-import { NodeProperties, createNode } from "../Node";
+import { NodeProperties, createNode } from "../node";
 import { SyntaxNode } from "tree-sitter";
-import { visitCallSignature } from "./call_signature.visitor";
-import Source from "../../../interfaces/Source";
+import { visitCallSignature } from "./signature.visitor";
 import match from "../../../utils/match";
+import Source from "../../../interfaces/Source";
 
 export function visitFunction(
     source: Source,

@@ -1,13 +1,11 @@
 import { isJavaDocComment } from "../../../utils/comment";
-import { NodeProperties, createNode } from "../Node";
+import { NodeProperties, createNode } from "../node";
 import { SyntaxNode } from "tree-sitter";
-import { visitMethodDefinition } from "./method_definition.visitor";
-import { visitPublicFieldDefinition } from "./public_field_definition.visitor";
-import { visitTypeIdentifier } from "./type.visitor";
-import Source from "../../../interfaces/Source";
 import log, { ErrorType } from "../../../utils/log";
 import match from "../../../utils/match";
-import visitTypeParameters from "./type_parameters.visitor";
+import Source from "../../../interfaces/Source";
+import visitTypeParameters, { visitTypeIdentifier, visitType } from "./type.visitor";
+import { visitCallSignature } from "./signature.visitor";
 
 export function visitClass(
   source: Source,
@@ -28,7 +26,7 @@ export function visitClass(
       case 'class_body':
         return visitClassBody(source, child)
       default:
-        console.log(`[mr-doc::parser]: info - '${node.type.replace(/[_]/g, ' ')}' is not supported yet.`)
+        log.report(source, node, ErrorType.NodeTypeNotYetSupported);
         break;
     }
   });
@@ -84,7 +82,7 @@ export function visitClassBody(source: Source, node: SyntaxNode) {
               properties.push(visitPublicFieldDefinition(source, nextSibling, child));
               break;
             default:
-              log.report(source, nextSibling, ErrorType.NodeTypeNotSupported);
+              log.report(source, nextSibling, ErrorType.NodeTypeNotYetSupported);
               break;
           }
         }
@@ -96,5 +94,74 @@ export function visitClassBody(source: Source, node: SyntaxNode) {
     context: createNode(source, node),
     methods,
     properties
+  }
+}
+
+export function visitMethodDefinition(source: Source, node: SyntaxNode, comment: SyntaxNode) {
+  let method_definition = node.children;
+  let accessibility,
+    isAsync = false,
+    identifier,
+    type_parameters,
+    formal_parameters,
+    type_annotation;
+
+  if (match(method_definition[0], 'async')) {
+    isAsync = true;
+    method_definition.shift();
+  }
+  
+  if (match(method_definition[0], 'accessibility_modifier')) {
+    accessibility = createNode(source, method_definition.shift())
+  }
+
+  if (match(method_definition[0], 'property_identifier')) {
+    identifier = createNode(source, method_definition.shift())
+  }
+
+  if (match(method_definition[0], 'call_signature')) {
+    const call_signature = visitCallSignature(source, method_definition.shift())
+    type_parameters = call_signature.type_parameters;
+    formal_parameters = call_signature.formal_parameters;
+    type_annotation = call_signature.type_annotation;
+  }
+  return {
+    type: 'method',
+    context: createNode(source, node),
+    comment: createNode(source, node, null, true),
+    accessibility,
+    async: isAsync, 
+    identifier,
+    type_parameters,
+    formal_parameters,
+    type_annotation
+  }
+}
+
+export function visitPublicFieldDefinition(source: Source, node: SyntaxNode, comment: SyntaxNode) {
+  let public_field_definition = node.children;
+  let accessibility,
+    identifier,
+    type_annotation;
+
+  if (match(public_field_definition[0], 'accessibility_modifier')) {
+    accessibility = createNode(source, public_field_definition.shift());
+  }
+
+  if (match(public_field_definition[0], 'property_identifier')) {
+    identifier = createNode(source, public_field_definition.shift());
+  }
+
+  if (match(public_field_definition[0], 'type_annotation')) {
+    let type = public_field_definition.shift().children[1];
+    type_annotation = visitType(source, type);
+  }
+  return {
+    type: 'property',
+    context: createNode(source, node),
+    comment: createNode(source, comment, null, true),
+    identifier,
+    accessibility,
+    type_annotation
   }
 }

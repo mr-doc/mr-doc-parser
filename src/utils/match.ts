@@ -8,6 +8,7 @@ import { SyntaxNode } from "tree-sitter";
  * @return: boolean
  * ```
  */
-export default function match(node: SyntaxNode, type: string): boolean {
-  return node && node.type === type;
+export default function match(node: SyntaxNode, ...types: string[]): boolean {
+  const matches = types.map(type => node && type === node.type);
+  return matches.includes(true);
 }

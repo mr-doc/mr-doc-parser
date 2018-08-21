@@ -1,4 +1,4 @@
-import { NodeProperties } from "../Node";
+import { NodeProperties } from "../node";
 import { SyntaxNode } from "tree-sitter";
 import { visitNode } from "./node.visitor";
 import Source from "../../../interfaces/Source";
@@ -17,7 +17,7 @@ export function visitStatement(
     case 'export_statement':
       return visitExportStatement(source, node, comment);
     default:
-      log.report(source, node, ErrorType.NodeTypeNotSupported);
+      log.report(source, node, ErrorType.NodeTypeNotYetSupported);
       break;
   }
 }
