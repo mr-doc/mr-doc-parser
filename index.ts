@@ -43,4 +43,4 @@ const result = new Parser({
 
 
 // console.log(JSON.stringify(result, null, 2))
-// console.log(result);
+console.log(result);

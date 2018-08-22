@@ -1,7 +1,6 @@
-import { NodeProperties } from "../../common/emca";
 import { SyntaxNode } from "tree-sitter";
-import Source from "../../../interfaces/Source";
-import { ASTNode } from "../../common/ast";
+import Source from "../../interfaces/Source";
+import { ASTNode } from "../common/ast";
 export interface TreeSitterNode {
     visit(visitor: NodeVisitor): void;
 }
@@ -32,14 +31,23 @@ export declare class TypeScriptVisitor implements NodeVisitor {
     getAST(): ASTNode[];
     visitNode: (node: SyntaxNode) => ASTNode;
     visitChildren: (nodes: SyntaxNode[]) => ASTNode[];
-    visitProgram: (node: SyntaxNode) => ASTNode[];
-    visitComment: (node: SyntaxNode) => ASTNode;
-    visitContext: (node: SyntaxNode, properties?: Partial<NodeProperties>) => ASTNode;
-    visitInterfaceDeclaration: (node: SyntaxNode, properties?: Partial<NodeProperties>) => ASTNode;
-    visitInterface: (node: SyntaxNode, properties?: Partial<NodeProperties>) => ASTNode;
-    visitSignature: (node: SyntaxNode, properties?: Partial<NodeProperties>) => ASTNode;
-    visitTypeNode: (node: SyntaxNode) => ASTNode;
-    visitConstraint: (node: SyntaxNode) => ASTNode;
-    visitInheritanceClause: (node: SyntaxNode) => ASTNode;
-    visitTerminal: (node: SyntaxNode) => ASTNode;
+    private visitProgram;
+    private visitComment;
+    /**
+     * Visit the contextual node
+     *
+     * # Remark
+     *
+     * A node is considered contextual when a comment is visited and the node is its sibling.
+     */
+    private visitContext;
+    private visitInterfaceDeclaration;
+    private visitInterface;
+    private visitSignature;
+    private visitTypeNode;
+    private visitConstraint;
+    private visitInheritanceClause;
+    private visitFormalParamters;
+    private visitRequiredParameter;
+    private visitTerminal;
 }

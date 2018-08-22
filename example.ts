@@ -1,10 +1,13 @@
-
+/**
+ * Description
+ */
 interface A {
 
 }
 
 /**
  * Description
+ * @interface B
  */
 interface B<T extends A, K> extends A {
   /**
@@ -14,5 +17,5 @@ interface B<T extends A, K> extends A {
   /**
    * description
    */
-  func (x: string): void
+  func (x: string): A
 }

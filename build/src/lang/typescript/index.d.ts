@@ -16,5 +16,5 @@ export default class TypeScriptParser implements IParser {
     private options;
     private parser;
     constructor(file: Source, options: any);
-    parse: () => object[];
+    parse: () => import("../common/ast").ASTNode[];
 }

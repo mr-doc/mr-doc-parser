@@ -55,6 +55,7 @@ export default class JavaScriptParser implements IParser {
     //     // .map(this.checkType)
     //     .map(this.parseChildren)
     // }
+    return [];
   }
 
   // private filterType = (comment): boolean => {
@@ -105,4 +106,5 @@ export default class JavaScriptParser implements IParser {
   //   }
   //   return comment;
   // }
+
 }

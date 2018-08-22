@@ -2,8 +2,8 @@ import * as Parser from 'tree-sitter';
 import * as TypeScript from 'tree-sitter-typescript';
 import IParser from '../../interfaces/IParser';
 import Source from '../../interfaces/Source';
-import walk from './walk';
-import { TypeScriptVisitor } from './visitors/visitor';
+import walk from '../../utils/walk';
+import { TypeScriptVisitor } from './visitor';
 
 
 /**

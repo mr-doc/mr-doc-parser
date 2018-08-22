@@ -22,5 +22,5 @@ import IParser from './src/interfaces/IParser';
 export default class Parser implements IParser {
     private parser;
     constructor(file: Source, options?: any);
-    parse: () => any;
+    parse: () => import("./src/lang/common/ast").ASTNode[];
 }

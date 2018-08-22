@@ -16,5 +16,5 @@ export default class JavaScriptParser implements IParser {
     private options;
     private parser;
     constructor(file: Source, options: any);
-    parse: () => void;
+    parse: () => any[];
 }

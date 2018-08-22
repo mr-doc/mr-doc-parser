@@ -1,9 +1,7 @@
 /**
  * An interface that represents a range.
  *
- * ```xdoc
  * @interface Range
- * ```
  */
 export interface Range {
     start: number;
@@ -13,30 +11,24 @@ export interface Range {
  * An interface that represents the positional
  * and locational ranges of a source code.
  *
- * ```xdoc
  * @interface TextRange
- * ```
  */
 export default interface TextRange {
     /**
      * Represents a context's start and end position.
-     * ```xdoc
      * @property position: {
      *  start: number,
      *  end: number
      * }
-     * ```
      */
     position: Range;
     /**
      * Represents a context's row and column location.
      *
-     * ```xdoc
      * @location: {
      *  row: Range,
      *  column: Range
      * }
-     * ```
      */
     location: {
         row: Range;
