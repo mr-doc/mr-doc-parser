@@ -1,7 +1,8 @@
 import Source from './src/interfaces/Source';
 import ParserFactory from './src/ParserFactory';
-import IParser from './src/interfaces/IParser';
+import ParserInterface from './src/interfaces/ParserInterface';
 import * as FS from 'fs';
+import { Tree } from 'tree-sitter';
 // import { ASTNode } from './src/lang/common/ast';
 /**
  * A class that parses a source code and generates an AST.
@@ -22,21 +23,27 @@ import * as FS from 'fs';
  * 
  * ```
  */
-export default class Parser implements IParser {
+export default class Parser implements ParserInterface {
 
-  private parser: IParser;
+  private parser: ParserInterface;
   constructor(file: Source, options: any = {}) {
     this.parser = (new ParserFactory(file, options)).getParser();
   }
   parse = () => {
     return this.parser.parse()
   }
+  get tree (): Tree {
+    return this.parser.tree;
+  }
 }
-const path = `${process.cwd()}/example.ts`;
+
+const path = `${process.cwd()}/corpus/example.js`;
 const result = new Parser({
   name: 'index.ts',
   path: path,
   text: FS.readFileSync(path, 'utf-8')
 }, {
-  language: 'typescript'
+  language: 'javascript'
 }).parse();
+
+console.log(result);

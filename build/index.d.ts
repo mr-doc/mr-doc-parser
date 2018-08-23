@@ -1,5 +1,6 @@
 import Source from './src/interfaces/Source';
-import IParser from './src/interfaces/IParser';
+import ParserInterface from './src/interfaces/ParserInterface';
+import { Tree } from 'tree-sitter';
 /**
  * A class that parses a source code and generates an AST.
  *
@@ -19,8 +20,9 @@ import IParser from './src/interfaces/IParser';
  *
  * ```
  */
-export default class Parser implements IParser {
+export default class Parser implements ParserInterface {
     private parser;
     constructor(file: Source, options?: any);
     parse: () => import("./src/lang/common/ast").ASTNode[];
+    readonly tree: Tree;
 }

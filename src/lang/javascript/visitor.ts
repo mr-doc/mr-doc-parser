@@ -12,7 +12,7 @@ import Source from "../../interfaces/Source";
 /**
  * A class that visits ASTNodes from a TypeScript tree.
  */
-export class TypeScriptVisitor implements NodeVisitor {
+export class JavaScriptVisitor implements NodeVisitor {
   private ast: ASTNode[] = []
   private source: Source
   constructor(source: Source) {
@@ -122,11 +122,12 @@ export class TypeScriptVisitor implements NodeVisitor {
         /* Match terminals */
         if (match(node,
           'identifier', 'extends', 'property_identifier', 'accessibility_modifier',
-          'string', 'void', 'boolean', 'null', 'undefined', 'number', 'return',
-          'get', 'function', 'namespace'
+          'null', 'undefined', 'return',
+          'get', 'function', 'namespace',
         )) {
           return this.visitTerminal(node);
         }
+        
         log.report(this.source, node, ErrorType.NodeTypeNotYetSupported);
         break;
     }
@@ -151,7 +152,7 @@ export class TypeScriptVisitor implements NodeVisitor {
     // The first step is to parse all the comments in the root node
     let comments = this.visitChildren(this.filterType(node, 'comment'));
     // Parse the namespaces in expression_statement
-    let namespaces = this.visitChildren(this.filterType(node, 'expression_statement'));
+    // let namespaces = this.visitChildren(this.filterType(node, 'expression_statement'));
     // Parse the export statements in the root node
     let exports = this.visitChildren(this.filterType(node, 'export_statement'));
 
@@ -161,9 +162,6 @@ export class TypeScriptVisitor implements NodeVisitor {
       const context = comment;
       visited[getStartLocation(context)] = true;
     }
-
-    // Remove the visited nodes from namespaces array
-    _.remove(namespaces, x => visited[getStartLocation(x)]);
 
     // Exports are oddballs since some exports may reference
     // a type/node that may have been commented.
@@ -195,7 +193,7 @@ export class TypeScriptVisitor implements NodeVisitor {
     // Removed the matched exports
     _.remove(exports, x => matched[getStartLocation(x)])
 
-    return [].concat(comments).concat(namespaces).concat(exports);
+    return [].concat(comments).concat(exports);
   }
 
   private visitComment = (node: SyntaxNode): ASTNode => {
@@ -221,8 +219,7 @@ export class TypeScriptVisitor implements NodeVisitor {
       case 'expression_statement':
         return this.visitExpressionStatement(node, properties);
       case 'class':
-      case 'interface_declaration':
-        return this.visitClassOrInterface(node, properties)
+        return this.visitClass(node, properties)
       case 'function':
       case 'call_signature':
       case 'method_signature':
@@ -275,7 +272,7 @@ export class TypeScriptVisitor implements NodeVisitor {
 
   /* Declarations */
 
-  private visitClassOrInterface = (node: SyntaxNode, properties?: Partial<NodeProperties>): ASTNode => {
+  private visitClass = (node: SyntaxNode, properties?: Partial<NodeProperties>): ASTNode => {
     // Since 'interface' or 'class' is always first in the array
     // we'll need to remove it from the array.
     let children = node.children;

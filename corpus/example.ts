@@ -2,7 +2,7 @@ export namespace X {
   /**
    * 
    */
-  export function name(params:string) {
+  export function name(...args) {
     
   }
 }

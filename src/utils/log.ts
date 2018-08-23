@@ -13,7 +13,7 @@ class ParserLog extends Log {
         const location = range(node).location;
         const sameLine = location.row.start === location.row.end;
         const getLineRange = () => sameLine ? location.row.start + 1 : location.row.start + 1 + ' - ' + location.row.end + 1;
-        const culprit = `Line${sameLine ? '' : 's'} ${getLineRange()} in '${source.path}${source.name}'`;
+        const culprit = `Line${sameLine ? '' : 's'} ${getLineRange()} in '${source.path}'`;
         switch (error) {
             case ErrorType.NodeTypeNotYetSupported:
                 this.info(`'${node.type.replace(/[_]/g, ' ')}' is not yet supported:\n${culprit}`)

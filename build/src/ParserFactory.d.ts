@@ -1,8 +1,8 @@
 import Source from "./interfaces/Source";
-import IParser from "./interfaces/IParser";
+import ParserInterface from "./interfaces/ParserInterface";
 export default class ParserFactory {
     private file;
     private options;
     constructor(file: Source, options?: any);
-    getParser: () => IParser;
+    getParser: () => ParserInterface;
 }

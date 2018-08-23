@@ -1,9 +1,10 @@
 import * as Parser from 'tree-sitter';
 import * as JavaScript from 'tree-sitter-javascript';
-import IParser from '../../interfaces/IParser';
+import ParserInterface from '../../interfaces/ParserInterface';
 import Source from '../../interfaces/Source';
-// import IResult from '../../interfaces/IResult';
-// import IComment from '../../interfaces/IComment';
+import { ASTNode } from '../common/ast';
+import { JavaScriptVisitor } from './visitor';
+import walk from '../../utils/walk';
 
 /**
  * A class that parses JavaScript comments.
@@ -16,95 +17,28 @@ import Source from '../../interfaces/Source';
  * @export default
  * ```
  */
-export default class JavaScriptParser implements IParser {
-  private file: Source;
+export default class JavaScriptParser implements ParserInterface {
+  
+  private source: Source;
   private options: any;
   private parser: Parser;
-  constructor(file: Source, options: any) {
-    this.file = file;
+  private tree_: Parser.Tree;
+  constructor(source: Source, options: any) {
+    this.source = source;
     Object.assign(this.options = {}, options || {});
     this.parser = new Parser();
     this.parser.setLanguage(JavaScript);
+    this.tree_ = this.parser.parse(this.source.text);
   }
-  parse = () => {
-    // let tree = this.parser.parse(this.file.text);
-    // // Get the first comment
-    // let first_comment = tree.rootNode.children
-    //   .filter(node => node.type === "comment")[0];
-    // const first_comment_string = this.file.text
-    // .substring(first_comment.startIndex, first_comment.endIndex);
-    
-    // // Remove any legal or unncessary comments
-    // if (first_comment_string.includes("copyright") ||
-    //   first_comment_string.includes("author") ||
-    //   first_comment_string.includes("terms and conditions")) {
-    //   tree.edit({
-    //     startIndex: first_comment.startIndex,
-    //     oldEndIndex: first_comment.endIndex,
-    //     newEndIndex: first_comment.endIndex,
-    //     startPosition: { row: 0, column: 0 },
-    //     oldEndPosition: { row: 0, column: 0 },
-    //     newEndPosition: { row: 0, column: 0 },
-    //   });
-    //   tree = this.parser.parse('', tree);
-    // }
-    // return {
-    //   file: this.file,
-    //   comments: CommentParser.parse(tree.rootNode, this.file.text)
-    //     .filter(this.filterType)
-    //     // .map(this.checkType)
-    //     .map(this.parseChildren)
-    // }
-    return [];
+  parse(): ASTNode[] {
+    const visitor = new JavaScriptVisitor(this.source);
+    const root = walk(this.tree.rootNode);
+    // console.time('visit')
+    root.visit(visitor)
+    // console.timeEnd('visit')
+    return visitor.getAST();
   }
-
-  // private filterType = (comment): boolean => {
-  //   return (this.options.filter ||
-  //     [
-  //       'function',
-  //       'class',
-  //       'variable_declaration'
-  //     ]).includes(comment.context.type)
-  // }
-
-  // private checkType = (comment) => {
-  //   const tree = this.parser.parse(comment.context.text);
-  //   switch (comment.context.type) {
-  //     case 'variable_declaration':
-  //       // Check whether we have an anonymous class
-  //       if (comment.context.text.includes("class")) {
-  //         // Drill down until we find the class body
-  //         const variable_declarator = tree.rootNode.children[0].children[1];
-  //         const anonymous_class = variable_declarator.children
-  //           .filter(node => node.type === "anonymous_class")[0]
-  //         const class_body = anonymous_class.children[1];
-  //         comment.context.children = CommentParser.parse(
-  //           class_body,
-  //           comment.context.text,
-  //           { location: comment.context.location, position: comment.context.position }
-  //         );
-  //       }
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   return comment;
-  // }
-
-  // private parseChildren = (comment) => {
-  //   switch (comment.context.type) {
-  //     case 'class':
-  //       const tree = this.parser.parse(comment.context.text);
-  //       comment.context.children = CommentParser.parse(
-  //         tree.rootNode,
-  //         comment.context.text,
-  //         { location: comment.context.location, position: comment.context.position }
-  //       ).filter(child => child.context.type === 'method_definition');
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   return comment;
-  // }
-
+  get tree (): Parser.Tree {
+    return this.tree_;
+  }
 }

@@ -2,5 +2,5 @@ export declare namespace X {
     /**
      *
      */
-    function name(params: string): void;
+    function name(...args: any[]): void;
 }

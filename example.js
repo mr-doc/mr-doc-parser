@@ -1,7 +1,0 @@
-/**
- * @author
- */
-
- function b() {
-   
- }

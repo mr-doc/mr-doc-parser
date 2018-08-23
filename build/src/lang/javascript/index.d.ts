@@ -1,5 +1,7 @@
-import IParser from '../../interfaces/IParser';
+import * as Parser from 'tree-sitter';
+import ParserInterface from '../../interfaces/ParserInterface';
 import Source from '../../interfaces/Source';
+import { ASTNode } from '../common/ast';
 /**
  * A class that parses JavaScript comments.
  *
@@ -11,10 +13,12 @@ import Source from '../../interfaces/Source';
  * @export default
  * ```
  */
-export default class JavaScriptParser implements IParser {
-    private file;
+export default class JavaScriptParser implements ParserInterface {
+    private source;
     private options;
     private parser;
-    constructor(file: Source, options: any);
-    parse: () => any[];
+    private tree_;
+    constructor(source: Source, options: any);
+    parse(): ASTNode[];
+    readonly tree: Parser.Tree;
 }

@@ -1,5 +1,5 @@
 import Source from "./interfaces/Source";
-import IParser from "./interfaces/IParser";
+import ParserInterface from "./interfaces/ParserInterface";
 import JavaScriptParser from "./lang/javascript";
 import TypeScriptParser from './lang/typescript';
 
@@ -13,7 +13,7 @@ export default class ParserFactory {
     Object.assign(this.options, options)
   }
 
-  getParser = (): IParser => {
+  getParser = (): ParserInterface => {
     switch (this.options.language.toLowerCase()) {
       case 'js':
       case 'javascript':
