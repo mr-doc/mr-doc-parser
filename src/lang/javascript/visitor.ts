@@ -110,11 +110,12 @@ export class JavaScriptVisitor implements NodeVisitor {
           'intersection_type', 'union_type',
           'class_body',
           'extends_clause',
-          'unary_expression', 'binary_expression',
+          'unary_expression', 'binary_expression', 'parenthesized_expression', 'member_expression',
           'statement_block', 'return_statement', 'export_statement', 'expression_statement',
           // A call_signature can also be a non-contextual node
           'call_signature',
-          'internal_module'
+          'internal_module',
+          'if_statement'
         )) {
           return this.visitNonTerminal(node, properties)
         }
@@ -123,13 +124,13 @@ export class JavaScriptVisitor implements NodeVisitor {
         if (match(node,
           'identifier', 'extends', 'property_identifier', 'accessibility_modifier',
           'null', 'undefined', 'return',
-          'get', 'function', 'namespace',
+          'get', 'function', 'namespace', 'if', 'const'
         )) {
           return this.visitTerminal(node);
         }
-        
+
         log.report(this.source, node, ErrorType.NodeTypeNotYetSupported);
-        break;
+        return;
     }
   }
 
@@ -137,7 +138,7 @@ export class JavaScriptVisitor implements NodeVisitor {
     let children: ASTNode[] = [];
     for (let i = 0; i < nodes.length; i++) {
       const node = nodes[i];
-      if (!node.type.match(/[<>(){},:;\[\]&|=\+\-\*\/]/) && node.type !== '...') {
+      if (!node.type.match(/[<>(){},:;\[\]&|=\+\-\*\/!.]/) && node.type !== '...') {
         const child = this.visitNode(node);
         if (child) children.push(child);
       }
@@ -177,8 +178,8 @@ export class JavaScriptVisitor implements NodeVisitor {
         for (let i = 0; i < exports.length; i++) {
           const export_ = exports[i];
           const context = comment.context;
-          for (let j = 0; j < context.children.length; j++) {
-            if (context.children[i].type === export_.type) {
+          for (let j = 0; context && j < context.children.length; j++) {
+            if (context.children[i] && context.children[i].type === export_.type) {
               matched[getStartLocation(export_)] = true;
               comment.context.properties = Object.assign(
                 comment.context.properties || {},
@@ -226,10 +227,11 @@ export class JavaScriptVisitor implements NodeVisitor {
       case 'property_signature':
       case 'public_field_definition':
       case 'method_definition':
+      case 'lexical_declaration':
         return this.visitNonTerminal(node, properties);
       default:
         log.report(this.source, node, ErrorType.NodeTypeNotYetSupported);
-        break;
+        return;
     }
   }
 
@@ -251,10 +253,16 @@ export class JavaScriptVisitor implements NodeVisitor {
   private visitExpressionStatement = (node: SyntaxNode, properties: Partial<NodeProperties>): ASTNode => {
     let children = node.children;
     const child = children.shift();
+
     if (match(child, 'internal_module')) {
       return this.visitInternalModule(child, properties)
     }
-    return this.visitNonTerminal(node);
+    
+    if (match(child, 'function')) {
+      if (properties) return this.visitContext(child);
+    }
+
+    return this.visitNonTerminal(child)
   }
 
   /* Modules */
@@ -324,6 +332,13 @@ export class JavaScriptVisitor implements NodeVisitor {
     // Handle special cases where an intermal_module can exist in an expression_statement
     if (match(node, 'expression_statement')) {
       return this.visitExpressionStatement(node, properties);
+    }
+
+    // Handle special cases where a function has a statement_block
+    if (match(node, 'function')) {
+      _.remove(children, child => match(child, 'statement_block'))
+      console.log(children);
+      return createASTNode(this.source, node, this.visitChildren(children), properties);
     }
 
     return createASTNode(this.source, node, this.visitChildren(children), properties);

@@ -37,13 +37,13 @@ export default class Parser implements ParserInterface {
   }
 }
 
-const path = `${process.cwd()}/corpus/example.js`;
+const path = `${process.cwd()}/corpus/ReactElementValidator.txt`;
 const result = new Parser({
   name: 'index.ts',
   path: path,
   text: FS.readFileSync(path, 'utf-8')
 }, {
-  language: 'javascript'
+  language: 'ts'
 }).parse();
 
-console.log(result);
+// console.log(result);

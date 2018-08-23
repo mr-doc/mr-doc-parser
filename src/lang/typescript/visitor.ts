@@ -1,5 +1,5 @@
 import { createASTNode, ASTNode } from "../common/ast";
-import { isJavaDocComment } from "../../utils/comment";
+import { isJavaDocComment, isLegalComment } from "../../utils/comment";
 import { NodeProperties, NodeInheritance } from "../common/emca";
 import { NodeVisitor } from "../common/node";
 import { sibling } from "../../utils/sibling";
@@ -110,11 +110,13 @@ export class TypeScriptVisitor implements NodeVisitor {
           'intersection_type', 'union_type',
           'class_body',
           'extends_clause',
-          'unary_expression', 'binary_expression',
+          'unary_expression', 'binary_expression', 'member_expression',
           'statement_block', 'return_statement', 'export_statement', 'expression_statement',
           // A call_signature can also be a non-contextual node
           'call_signature',
-          'internal_module'
+          'internal_module',
+          'variable_declarator',
+          'object'
         )) {
           return this.visitNonTerminal(node, properties)
         }
@@ -123,7 +125,7 @@ export class TypeScriptVisitor implements NodeVisitor {
         if (match(node,
           'identifier', 'extends', 'property_identifier', 'accessibility_modifier',
           'string', 'void', 'boolean', 'null', 'undefined', 'number', 'return',
-          'get', 'function', 'namespace'
+          'get', 'function', 'namespace', 'const'
         )) {
           return this.visitTerminal(node);
         }
@@ -179,8 +181,8 @@ export class TypeScriptVisitor implements NodeVisitor {
         for (let i = 0; i < exports.length; i++) {
           const export_ = exports[i];
           const context = comment.context;
-          for (let j = 0; j < context.children.length; j++) {
-            if (context.children[i].type === export_.type) {
+          for (let j = 0; context && j < context.children.length; j++) {
+            if (context.children[i] && context.children[i].type === export_.type) {
               matched[getStartLocation(export_)] = true;
               comment.context.properties = Object.assign(
                 comment.context.properties || {},
@@ -199,7 +201,7 @@ export class TypeScriptVisitor implements NodeVisitor {
   }
 
   private visitComment = (node: SyntaxNode): ASTNode => {
-    if (isJavaDocComment(this.source, node)) {
+    if (isJavaDocComment(this.source, node) && !isLegalComment(this.source, node)) {
       const nextSibling = sibling(node);
       if (nextSibling) {
         return createASTNode(this.source, node, this.visitContext(nextSibling, {}), true)
@@ -229,6 +231,7 @@ export class TypeScriptVisitor implements NodeVisitor {
       case 'property_signature':
       case 'public_field_definition':
       case 'method_definition':
+      case 'lexical_declaration':
         return this.visitNonTerminal(node, properties);
       default:
         log.report(this.source, node, ErrorType.NodeTypeNotYetSupported);
@@ -254,10 +257,16 @@ export class TypeScriptVisitor implements NodeVisitor {
   private visitExpressionStatement = (node: SyntaxNode, properties: Partial<NodeProperties>): ASTNode => {
     let children = node.children;
     const child = children.shift();
+
     if (match(child, 'internal_module')) {
       return this.visitInternalModule(child, properties)
     }
-    return this.visitNonTerminal(node);
+
+    if (match(child, 'function')) {
+      if (properties) return this.visitContext(child, properties);
+    }
+
+    return this.visitNonTerminal(child)
   }
 
   /* Modules */
@@ -327,6 +336,11 @@ export class TypeScriptVisitor implements NodeVisitor {
     // Handle special cases where an intermal_module can exist in an expression_statement
     if (match(node, 'expression_statement')) {
       return this.visitExpressionStatement(node, properties);
+    }
+
+    if (match(node, 'function')) {
+      _.remove(children, child => match(child, 'statement_block'))
+      return createASTNode(this.source, node, this.visitChildren(children), properties);
     }
 
     return createASTNode(this.source, node, this.visitChildren(children), properties);

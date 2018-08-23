@@ -4,7 +4,6 @@ import ParserInterface from '../../interfaces/ParserInterface';
 import Source from '../../interfaces/Source';
 import walk from '../../utils/walk';
 import { TypeScriptVisitor } from './visitor';
-import log from '../../utils/log';
 
 
 /**
@@ -32,7 +31,7 @@ export default class TypeScriptParser implements ParserInterface {
   }
   parse = () => {
     const visitor = new TypeScriptVisitor(this.source);
-    const root = walk(this.tree.rootNode);
+    const root = walk(this.tree_.rootNode);
     // console.time('visit')
     root.visit(visitor)
     // console.timeEnd('visit')
@@ -40,6 +39,6 @@ export default class TypeScriptParser implements ParserInterface {
   }
 
   get tree (): Parser.Tree {
-    return this.tree;
+    return this.tree_;
   }
 }

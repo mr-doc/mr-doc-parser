@@ -6,6 +6,7 @@ import range from "../../utils/range";
 import Source from "../../interfaces/Source";
 import TextRange from "../../interfaces/TextRange";
 import xdoc from 'xdoc-parser';
+import * as _ from 'lodash'
 
 
 export interface ASTNode extends TextRange {
@@ -38,17 +39,28 @@ export interface ASTNode extends TextRange {
   }
 }
 
+export function isASTNode(object: object): object is ASTNode {
+  return object && 'type' in object && 'text' in object && 'children' in object;
+}
+
 export function createASTNode(source: Source, node: SyntaxNode): ASTNode
+export function createASTNode(source: Source, node: SyntaxNode, properties: object)
 export function createASTNode(source: Source, node: SyntaxNode, children: object[]): ASTNode
 export function createASTNode(source: Source, node: SyntaxNode, children: object[], properties: object)
-export function createASTNode(source: Source, node: SyntaxNode, context: ASTNode, document: boolean): ASTNode 
+export function createASTNode(source: Source, node: SyntaxNode, context: ASTNode, document: boolean): ASTNode
 export function createASTNode(source: Source, node: SyntaxNode, arg1?: any, arg2?: any): ASTNode {
 
   let context, children = [], document = typeof arg2 === 'boolean' && arg2 === true, properties;
-  if (Array.isArray(arg1)) children = arg1;
-  else context = arg1;
 
-  if (typeof arg2 === 'object') {
+  if (_.isPlainObject(arg1) && !isASTNode(arg1)) {
+    properties = arg1;
+  } else if (_.isPlainObject(arg1) && isASTNode(arg1)) {
+    context = arg1;
+  } else if (_.isArray(arg1)) {
+    children = arg1;
+  }
+
+  if (_.isPlainObject(arg2)) {
     properties = arg2;
   }
 

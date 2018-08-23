@@ -32,7 +32,7 @@ export default class JavaScriptParser implements ParserInterface {
   }
   parse(): ASTNode[] {
     const visitor = new JavaScriptVisitor(this.source);
-    const root = walk(this.tree.rootNode);
+    const root = walk(this.tree_.rootNode);
     // console.time('visit')
     root.visit(visitor)
     // console.timeEnd('visit')
