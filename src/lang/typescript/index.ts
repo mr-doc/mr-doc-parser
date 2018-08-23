@@ -4,6 +4,7 @@ import IParser from '../../interfaces/IParser';
 import Source from '../../interfaces/Source';
 import walk from '../../utils/walk';
 import { TypeScriptVisitor } from './visitor';
+import log from '../../utils/log';
 
 
 /**
@@ -29,10 +30,12 @@ export default class TypeScriptParser implements IParser {
   }
   parse = () => {
     const tree = this.parser.parse(this.source.text);
-    if (tree.rootNode.type === "program") {
-      const visitor = new TypeScriptVisitor(this.source);
-      walk(tree.rootNode).visit(visitor);
-      return visitor.getAST();
-    }
+    const visitor = new TypeScriptVisitor(this.source);
+    const root = walk(tree.rootNode);
+    console.time('visit')
+    root.visit(visitor)
+    console.timeEnd('visit')
+
+    return visitor.getAST();
   }
 }

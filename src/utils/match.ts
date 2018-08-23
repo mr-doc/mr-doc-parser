@@ -9,6 +9,11 @@ import { SyntaxNode } from "tree-sitter";
  * ```
  */
 export default function match(node: SyntaxNode, ...types: string[]): boolean {
-  const matches = types.map(type => node && type === node.type);
-  return matches.includes(true);
+  for (let i = 0; i < types.length; i++) {
+    const type = types[i];
+    if (node.type === type) {
+      return true;
+    }
+  }
+  return false;
 }

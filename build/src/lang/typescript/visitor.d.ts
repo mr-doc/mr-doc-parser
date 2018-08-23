@@ -1,23 +1,14 @@
+import { ASTNode } from "../common/ast";
+import { NodeProperties } from "../common/emca";
+import { NodeVisitor } from "../common/node";
 import { SyntaxNode } from "tree-sitter";
 import Source from "../../interfaces/Source";
-import { ASTNode } from "../common/ast";
-export interface TreeSitterNode {
-    visit(visitor: NodeVisitor): void;
-}
-export interface NodeVisitor {
-    getAST(): ASTNode[];
-    visitNode(node: SyntaxNode): ASTNode;
-    visitChildren(nodes: SyntaxNode[]): ASTNode[];
-}
-export declare class Node implements TreeSitterNode {
-    syntaxNode: SyntaxNode;
-    constructor(syntaxNode: SyntaxNode);
-    visit: (visitor: NodeVisitor) => void;
-}
+/**
+ * A class that visits ASTNodes from a TypeScript tree.
+ */
 export declare class TypeScriptVisitor implements NodeVisitor {
     private ast;
     private source;
-    private parent;
     constructor(source: Source);
     /**
      * Determines whether a node has inheritance
@@ -27,9 +18,16 @@ export declare class TypeScriptVisitor implements NodeVisitor {
      * Returns a node's inheritance type
      */
     private getInheritanceType;
-    private filterComments;
+    /**
+     * Determines whether an export is default
+     */
+    private hasDefaultExport;
+    /**
+     * Returns only the comments from a node's children.
+     */
+    private filterType;
     getAST(): ASTNode[];
-    visitNode: (node: SyntaxNode) => ASTNode;
+    visitNode: (node: SyntaxNode, properties?: Partial<NodeProperties>) => ASTNode;
     visitChildren: (nodes: SyntaxNode[]) => ASTNode[];
     private visitProgram;
     private visitComment;
@@ -41,13 +39,10 @@ export declare class TypeScriptVisitor implements NodeVisitor {
      * A node is considered contextual when a comment is visited and the node is its sibling.
      */
     private visitContext;
-    private visitInterfaceDeclaration;
-    private visitInterface;
-    private visitSignature;
-    private visitTypeNode;
-    private visitConstraint;
-    private visitInheritanceClause;
-    private visitFormalParamters;
-    private visitRequiredParameter;
+    private visitExportStatement;
+    private visitExpressionStatement;
+    private visitInternalModule;
+    private visitClassOrInterface;
+    private visitNonTerminal;
     private visitTerminal;
 }

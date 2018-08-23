@@ -2,7 +2,7 @@ import Source from './src/interfaces/Source';
 import ParserFactory from './src/ParserFactory';
 import IParser from './src/interfaces/IParser';
 import * as FS from 'fs';
-
+// import { ASTNode } from './src/lang/common/ast';
 /**
  * A class that parses a source code and generates an AST.
  * 
@@ -32,15 +32,11 @@ export default class Parser implements IParser {
     return this.parser.parse()
   }
 }
-
+const path = `${process.cwd()}/example.ts`;
 const result = new Parser({
   name: 'index.ts',
-  path: '../../',
-  text: FS.readFileSync(`${process.cwd()}/example.ts`, 'utf-8')
+  path: path,
+  text: FS.readFileSync(path, 'utf-8')
 }, {
   language: 'typescript'
 }).parse();
-
-
-// console.log(JSON.stringify(result, null, 2))
-console.log(result);
