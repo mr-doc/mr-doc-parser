@@ -1,10 +1,10 @@
-import * as Parser from 'tree-sitter';
+import * as TreeSitter from 'tree-sitter';
 import * as TypeScript from 'tree-sitter-typescript';
-import ParserInterface from '../../interfaces/ParserInterface';
+import Parser from '../common/parser';
 import Source from '../../interfaces/Source';
 import walk from '../../utils/walk';
 import { TypeScriptVisitor } from './visitor';
-import { ASTNode } from '../common/ast';
+import ASTNode from '../../interfaces/ASTNode';
 
 
 /**
@@ -16,28 +16,23 @@ import { ASTNode } from '../common/ast';
  * @implements IParser
  * @export default
  */
-export default class TypeScriptParser implements ParserInterface {
-  private source: Source;
-  private options: any;
-  private parser: Parser;
-  private tree_: Parser.Tree;
+export default class TypeScriptParser extends Parser {
+  private parser: TreeSitter;
+  private tree_: TreeSitter.Tree;
   constructor(source: Source, options: any) {
-    this.source = source;
-    Object.assign(this.options = {}, options || {});
-    this.parser = new Parser();
+    super(source, options);
+    this.parser = new TreeSitter();
     this.parser.setLanguage(TypeScript);
     this.tree_ = this.parser.parse(this.source.text);
   }
   parse = (): ASTNode[] => {
     const visitor = new TypeScriptVisitor(this.source);
-    const root = walk(this.tree_.rootNode);
-    // console.time('visit')
-    root.visit(visitor)
-    // console.timeEnd('visit')
+    const nodes = walk(this.tree_.rootNode);
+    nodes.visit(visitor)
     return visitor.getAST();
   }
 
-  get tree (): Parser.Tree {
+  get tree (): TreeSitter.Tree {
     return this.tree_;
   }
 }

@@ -1,19 +1,16 @@
-import { ASTNode } from "./ast";
 import { SyntaxNode } from "tree-sitter";
+import Visitor from "./visitor";
 
 export interface TreeSitterNode {
-  visit(visitor: NodeVisitor): void
+  visit(visitor: Visitor): void
 }
 
-export interface NodeVisitor {
-  getAST(): ASTNode[]
-  visitNode(node: SyntaxNode, properties?: object): ASTNode
-  visitChildren(nodes: SyntaxNode[], properties?: object): ASTNode[]
-}
-
+/**
+ * A class that wraps a SyntaxNode as a Node
+ */
 export class Node implements TreeSitterNode {
   constructor(public syntaxNode: SyntaxNode) { }
-  visit = (visitor: NodeVisitor): void => {
+  visit = (visitor: Visitor): void => {
     visitor.visitNode(this.syntaxNode);
   }
 }

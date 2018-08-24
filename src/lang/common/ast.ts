@@ -1,43 +1,10 @@
-import { DocumentationNode } from 'xdoc-parser/src/XDocASTNode';
-import { RemarkNode } from 'xdoc-parser/src/XDocParser';
 import { SyntaxNode } from "tree-sitter";
 import { text } from "../../utils/text";
 import range from "../../utils/range";
 import Source from "../../interfaces/Source";
-import TextRange from "../../interfaces/TextRange";
 import xdoc from 'xdoc-parser';
 import * as _ from 'lodash'
-
-
-export interface ASTNode extends TextRange {
-  /**
-   * @property - The type of node.
-   */
-  type: string,
-  /**
-   * @property - The context string.
-   */
-  text: string,
-  /**
-   * @property - The node's children.
-   */
-  children: ASTNode[] | undefined[],
-  /**
-   * @property - The context node that a comment node refers to.
-   */
-  context: ASTNode,
-  /**
-   * @property - The properties that a ASTNode may possess.
-   */
-  properties?: object
-  /**
-   * @property - The parsed XDoc comment.
-   */
-  comment?: {
-    markdown: RemarkNode,
-    documentation: Partial<DocumentationNode>
-  }
-}
+import ASTNode from "../../interfaces/ASTNode";
 
 export function isASTNode(object: object): object is ASTNode {
   return object && 'type' in object && 'text' in object && 'children' in object;

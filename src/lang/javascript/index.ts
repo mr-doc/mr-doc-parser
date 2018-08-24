@@ -1,10 +1,10 @@
-import * as Parser from 'tree-sitter';
+import * as TreeSitter from 'tree-sitter';
 import * as JavaScript from 'tree-sitter-javascript';
-import ParserInterface from '../../interfaces/ParserInterface';
+import Parser from '../common/parser';
 import Source from '../../interfaces/Source';
-import { ASTNode } from '../common/ast';
 import { JavaScriptVisitor } from './visitor';
 import walk from '../../utils/walk';
+import ASTNode from '../../interfaces/ASTNode';
 
 /**
  * A class that parses JavaScript comments.
@@ -17,28 +17,22 @@ import walk from '../../utils/walk';
  * @export default
  * ```
  */
-export default class JavaScriptParser implements ParserInterface {
-  
-  private source: Source;
-  private options: any;
-  private parser: Parser;
-  private tree_: Parser.Tree;
+export default class JavaScriptParser extends Parser {
+  private parser: TreeSitter;
+  private tree_: TreeSitter.Tree;
   constructor(source: Source, options: any) {
-    this.source = source;
-    Object.assign(this.options = {}, options || {});
-    this.parser = new Parser();
+    super(source, options);
+    this.parser = new TreeSitter();
     this.parser.setLanguage(JavaScript);
     this.tree_ = this.parser.parse(this.source.text);
   }
   parse(): ASTNode[] {
     const visitor = new JavaScriptVisitor(this.source);
-    const root = walk(this.tree_.rootNode);
-    // console.time('visit')
-    root.visit(visitor)
-    // console.timeEnd('visit')
+    const nodes = walk(this.tree_.rootNode);
+    nodes.visit(visitor)
     return visitor.getAST();
   }
-  get tree (): Parser.Tree {
+  get tree (): TreeSitter.Tree {
     return this.tree_;
   }
 }

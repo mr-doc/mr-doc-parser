@@ -1,18 +1,19 @@
-import { createASTNode, ASTNode } from "../common/ast";
+import { createASTNode } from "../common/ast";
 import { isJavaDocComment } from "../../utils/comment";
-import { NodeProperties, NodeInheritance } from "../common/emca";
-import { NodeVisitor } from "../common/node";
 import { sibling } from "../../utils/sibling";
 import { SyntaxNode } from "tree-sitter";
 import * as _ from 'lodash';
 import log, { ErrorType } from "../../utils/log";
 import match from "../../utils/match";
 import Source from "../../interfaces/Source";
+import Visitor from "../common/visitor";
+import ASTNode from "../../interfaces/ASTNode";
+import { JavaScriptProperties, JavaScriptInheritance } from "./properties";
 
 /**
  * A class that visits ASTNodes from a TypeScript tree.
  */
-export class JavaScriptVisitor implements NodeVisitor {
+export class JavaScriptVisitor implements Visitor {
   private ast: ASTNode[] = []
   private source: Source
   constructor(source: Source) {
@@ -86,7 +87,7 @@ export class JavaScriptVisitor implements NodeVisitor {
 
   visitNode = (
     node: SyntaxNode,
-    properties?: Partial<NodeProperties>
+    properties?: Partial<JavaScriptProperties>
   ) => {
     switch (node.type) {
       case 'program':
@@ -213,7 +214,7 @@ export class JavaScriptVisitor implements NodeVisitor {
    * 
    * A node is considered contextual when a comment is visited and the node is its sibling.
    */
-  private visitContext = (node: SyntaxNode, properties?: Partial<NodeProperties>): ASTNode => {
+  private visitContext = (node: SyntaxNode, properties?: Partial<JavaScriptProperties>): ASTNode => {
     switch (node.type) {
       case 'export_statement':
         return this.visitExportStatement(node, properties);
@@ -237,7 +238,7 @@ export class JavaScriptVisitor implements NodeVisitor {
 
   /* Statements */
 
-  private visitExportStatement = (node: SyntaxNode, properties?: Partial<NodeProperties>): ASTNode => {
+  private visitExportStatement = (node: SyntaxNode, properties?: Partial<JavaScriptProperties>): ASTNode => {
     let children = node.children, defaultExport = false;
     // Remove 'export' since it's always first in the array
     children.shift();
@@ -250,14 +251,14 @@ export class JavaScriptVisitor implements NodeVisitor {
     return this.visitNode(child, { exports: { export: true, default: defaultExport } });
   }
 
-  private visitExpressionStatement = (node: SyntaxNode, properties: Partial<NodeProperties>): ASTNode => {
+  private visitExpressionStatement = (node: SyntaxNode, properties: Partial<JavaScriptProperties>): ASTNode => {
     let children = node.children;
     const child = children.shift();
 
     if (match(child, 'internal_module')) {
       return this.visitInternalModule(child, properties)
     }
-    
+
     if (match(child, 'function')) {
       if (properties) return this.visitContext(child);
     }
@@ -267,7 +268,7 @@ export class JavaScriptVisitor implements NodeVisitor {
 
   /* Modules */
 
-  private visitInternalModule = (node: SyntaxNode, properties?: Partial<NodeProperties>): ASTNode => {
+  private visitInternalModule = (node: SyntaxNode, properties?: Partial<JavaScriptProperties>): ASTNode => {
     let children: ASTNode[] = node.children.map(child => {
       if (match(child, 'statement_block')) {
         return createASTNode(this.source, node, this.visitChildren(this.filterType(child, 'comment')))
@@ -280,7 +281,7 @@ export class JavaScriptVisitor implements NodeVisitor {
 
   /* Declarations */
 
-  private visitClass = (node: SyntaxNode, properties?: Partial<NodeProperties>): ASTNode => {
+  private visitClass = (node: SyntaxNode, properties?: Partial<JavaScriptProperties>): ASTNode => {
     // Since 'interface' or 'class' is always first in the array
     // we'll need to remove it from the array.
     let children = node.children;
@@ -300,7 +301,7 @@ export class JavaScriptVisitor implements NodeVisitor {
         inheritance: {
           implements: implements_,
           extends: extends_
-        } as NodeInheritance
+        } as JavaScriptInheritance
       }));
 
     if (match(node, 'class')) {
@@ -312,7 +313,7 @@ export class JavaScriptVisitor implements NodeVisitor {
 
   /* Non-terminals */
 
-  private visitNonTerminal = (node: SyntaxNode, properties?: Partial<NodeProperties>): ASTNode => {
+  private visitNonTerminal = (node: SyntaxNode, properties?: Partial<JavaScriptProperties>): ASTNode => {
     let children = node.children;
     // Handle special cases where some non-terminals
     // contain comments which is what we care about
