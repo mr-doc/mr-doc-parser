@@ -2,6 +2,12 @@
  * 
  * @param x - description 
  */
-function name(...args) {
-    
+class A {
+  /**
+   * @method method
+   */
+  method () {
+    /* Some method */
+    const x = 1;
+  }
 }

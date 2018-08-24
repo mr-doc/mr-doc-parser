@@ -67,7 +67,6 @@ export class TypeScriptVisitor implements Visitor {
    * Returns only the comments from a node's children.
    */
   private filterType(node: SyntaxNode, type: string): SyntaxNode[] {
-    // console.time('filterType')
     let children: SyntaxNode[] = [];
     for (let i = 0; i < node.children.length; i++) {
       const child = node.children[i];
@@ -75,7 +74,6 @@ export class TypeScriptVisitor implements Visitor {
         children.push(child);
       }
     }
-    // console.timeEnd('filterType')
     return children;
   }
 
@@ -339,7 +337,7 @@ export class TypeScriptVisitor implements Visitor {
       return this.visitExpressionStatement(node, properties);
     }
 
-    if (match(node, 'function')) {
+    if (match(node, 'function') || match(node, 'method_definition')) {
       _.remove(children, child => match(child, 'statement_block'))
       return createASTNode(this.source, node, this.visitChildren(children), properties);
     }

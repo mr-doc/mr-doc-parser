@@ -20,9 +20,9 @@ import { Tree } from 'tree-sitter';
  *
  * ```
  */
-export default class MainParser extends Parser {
+export default class DocParser extends Parser {
     private parser;
-    constructor(source: Source, options: any);
+    constructor(source: Source, options?: object);
     parse: () => import("./src/interfaces/ASTNode").default[];
     readonly tree: Tree;
 }

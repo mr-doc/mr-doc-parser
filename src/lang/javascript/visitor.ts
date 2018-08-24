@@ -67,7 +67,6 @@ export class JavaScriptVisitor implements Visitor {
    * Returns only the comments from a node's children.
    */
   private filterType(node: SyntaxNode, type: string): SyntaxNode[] {
-    // console.time('filterType')
     let children: SyntaxNode[] = [];
     for (let i = 0; i < node.children.length; i++) {
       const child = node.children[i];
@@ -75,7 +74,6 @@ export class JavaScriptVisitor implements Visitor {
         children.push(child);
       }
     }
-    // console.timeEnd('filterType')
     return children;
   }
 
@@ -336,9 +334,8 @@ export class JavaScriptVisitor implements Visitor {
     }
 
     // Handle special cases where a function has a statement_block
-    if (match(node, 'function')) {
+    if (match(node, 'function') || match(node, 'method_definition')) {
       _.remove(children, child => match(child, 'statement_block'))
-      console.log(children);
       return createASTNode(this.source, node, this.visitChildren(children), properties);
     }
 
