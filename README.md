@@ -22,7 +22,7 @@ abstract class Parser {
 
 **Note**: See the [JavaScript parser](./src/lang/javascript/index.ts) for an example.
 
-### Implement the Language Visitor
+### Extend the Language Visitor
 
 The next step is to walk the tree that parsed by `tree-sitter` and to wrap each node as an `Node` type.
 Bear in mind that `tree-sitter` keeps its tree as a DOM-like structure.
@@ -46,7 +46,7 @@ const nodes = walk(tree);
 
 ```
 
-Once the tree is wrapped, we need to implement the abstract `Visitor` visitor:
+Once the tree is wrapped, we need to extend the abstract `Visitor` visitor:
 
 ```ts
 abstract class Visitor {

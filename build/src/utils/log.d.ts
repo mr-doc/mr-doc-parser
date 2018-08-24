@@ -1,12 +1,11 @@
-import { Log } from 'mr-doc-utils';
+import { Log, LogOptions } from 'mr-doc-utils';
 import Source from '../interfaces/Source';
 import { SyntaxNode } from 'tree-sitter';
 export declare enum ErrorType {
     NodeTypeNotYetSupported = 0,
     TreeSitterParseError = 1
 }
-declare class ParserLog extends Log {
+export default class ParserLogger extends Log {
+    constructor(namespace?: string, options?: LogOptions);
     report: (source: Source, node: SyntaxNode, error: ErrorType) => void;
 }
-declare const log: ParserLog;
-export default log;

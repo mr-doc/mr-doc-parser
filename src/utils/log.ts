@@ -1,4 +1,4 @@
-import { Log } from 'mr-doc-utils';
+import { Log, LogOptions } from 'mr-doc-utils';
 import Source from '../interfaces/Source';
 import { SyntaxNode } from 'tree-sitter';
 import range from './range';
@@ -8,7 +8,10 @@ export enum ErrorType {
     TreeSitterParseError
 }
 
-class ParserLog extends Log {
+export default class ParserLogger extends Log {
+    constructor(namespace?: string, options?: LogOptions) {
+        super(namespace, options);
+    }
     report = (source: Source, node: SyntaxNode, error: ErrorType): void => {
         const location = range(node).location;
         const sameLine = location.row.start === location.row.end;
@@ -25,8 +28,3 @@ class ParserLog extends Log {
         }
     }
 }
-
-
-const log = new ParserLog('mr-doc::parser');
-
-export default log;

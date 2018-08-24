@@ -1,9 +1,0 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-// import IResult from "./IResult";
-class IParser {
-    constructor(file, options) {
-    }
-}
-exports.default = IParser;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiSVBhcnNlci5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy9pbnRlcmZhY2VzL0lQYXJzZXIudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFFQSxtQ0FBbUM7QUFFbkMsTUFBOEIsT0FBTztJQUNuQyxZQUFZLElBQVksRUFBRSxPQUFZO0lBRXRDLENBQUM7Q0FFRjtBQUxELDBCQUtDIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFNvdXJjZSBmcm9tIFwiLi9Tb3VyY2VcIjtcclxuaW1wb3J0IHsgQVNUTm9kZSB9IGZyb20gXCIuLi9sYW5nL2NvbW1vbi9hc3RcIjtcclxuLy8gaW1wb3J0IElSZXN1bHQgZnJvbSBcIi4vSVJlc3VsdFwiO1xyXG5cclxuZXhwb3J0IGRlZmF1bHQgYWJzdHJhY3QgY2xhc3MgSVBhcnNlciB7XHJcbiAgY29uc3RydWN0b3IoZmlsZTogU291cmNlLCBvcHRpb25zOiBhbnkpIHtcclxuXHJcbiAgfVxyXG4gIGFic3RyYWN0IHBhcnNlKCk6IEFTVE5vZGVbXVxyXG59Il19

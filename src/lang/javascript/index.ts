@@ -25,7 +25,7 @@ export default class JavaScriptParser extends Parser {
     this.tree_ = this.parser.parse(this.source.text);
   }
   parse(): ASTNode[] {
-    const visitor = new JavaScriptVisitor(this.source);
+    const visitor = new JavaScriptVisitor(this.source, this.options);
     const nodes = walk(this.tree_.rootNode);
     nodes.visit(visitor)
     return visitor.getAST();

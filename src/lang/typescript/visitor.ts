@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import log, { ErrorType } from "../../utils/log";
 import match from "../../utils/match";
 import Source from "../../interfaces/Source";
-import Visitor from "../common/visitor";
+import Visitor, { VisitorOptions } from "../common/visitor";
 import ASTNode from "../../interfaces/ASTNode";
 import { createASTNode } from "../common/ast";
 import { TypeScriptProperties, TypeScriptInheritance } from "./properties";
@@ -13,10 +13,11 @@ import { TypeScriptProperties, TypeScriptInheritance } from "./properties";
 /**
  * A class that visits ASTNodes from a TypeScript tree.
  */
-export class TypeScriptVisitor implements Visitor {
+export class TypeScriptVisitor extends Visitor {
   private ast: ASTNode[] = []
   private source: Source
-  constructor(source: Source) {
+  constructor(source: Source, options: Partial<VisitorOptions>) {
+    super(options)
     this.source = source;
   }
 
@@ -95,7 +96,7 @@ export class TypeScriptVisitor implements Visitor {
         return this.visitComment(node);
       case 'MISSING':
       case 'ERROR':
-        log.report(this.source, node, ErrorType.TreeSitterParseError);
+        this.logger.report(this.source, node, ErrorType.TreeSitterParseError);
         break;
       default:
 
@@ -128,7 +129,7 @@ export class TypeScriptVisitor implements Visitor {
         )) {
           return this.visitTerminal(node);
         }
-        log.report(this.source, node, ErrorType.NodeTypeNotYetSupported);
+        this.logger.report(this.source, node, ErrorType.NodeTypeNotYetSupported);
         break;
     }
   }
@@ -233,7 +234,7 @@ export class TypeScriptVisitor implements Visitor {
       case 'lexical_declaration':
         return this.visitNonTerminal(node, properties);
       default:
-        log.report(this.source, node, ErrorType.NodeTypeNotYetSupported);
+        this.logger.report(this.source, node, ErrorType.NodeTypeNotYetSupported);
         break;
     }
   }

@@ -1,15 +1,15 @@
 import { SyntaxNode } from "tree-sitter";
 import Source from "../../interfaces/Source";
-import Visitor from "../common/visitor";
+import Visitor, { VisitorOptions } from "../common/visitor";
 import ASTNode from "../../interfaces/ASTNode";
 import { TypeScriptProperties } from "./properties";
 /**
  * A class that visits ASTNodes from a TypeScript tree.
  */
-export declare class TypeScriptVisitor implements Visitor {
+export declare class TypeScriptVisitor extends Visitor {
     private ast;
     private source;
-    constructor(source: Source);
+    constructor(source: Source, options: Partial<VisitorOptions>);
     /**
      * Determines whether a node has inheritance
      */
