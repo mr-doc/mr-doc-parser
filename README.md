@@ -20,6 +20,8 @@ abstract class Parser {
 }
 ```
 
+**Note**: See the [JavaScript parser](./src/lang/javascript/index.ts) for an example.
+
 ### Implement the Language Visitor
 
 The next step is to walk the tree that parsed by `tree-sitter` and to wrap each node as an `Node` type.
