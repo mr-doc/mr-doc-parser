@@ -1,4 +1,4 @@
-# Parser
+# mr-doc-parser
 
 [![Build Status](https://travis-ci.org/mr-doc/mr-doc-parser.svg?branch=master)](https://travis-ci.org/mr-doc/mr-doc-parser)
 
