@@ -1,7 +1,6 @@
 import Source from './src/interfaces/Source';
 import ParserFactory from './src/ParserFactory';
 import Parser from './src/lang/common/parser';
-import * as FS from 'fs';
 import { Tree } from 'tree-sitter';
 // import { ASTNode } from './src/lang/common/ast';
 /**
@@ -23,7 +22,7 @@ import { Tree } from 'tree-sitter';
  * 
  * ```
  */
-export default class MainParser extends Parser {
+export default class DocParser extends Parser {
 
   private parser: Parser;
   constructor(source: Source, options: any) {
@@ -37,14 +36,3 @@ export default class MainParser extends Parser {
     return this.parser.tree;
   }
 }
-
-const path = `${process.cwd()}/corpus/ReactElementValidator.txt`;
-const result = new MainParser({
-  name: 'index.ts',
-  path: path,
-  text: FS.readFileSync(path, 'utf-8')
-}, {
-  language: 'ts'
-}).parse();
-
-// console.log(result);
