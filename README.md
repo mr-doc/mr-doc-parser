@@ -2,13 +2,13 @@
 
 [![Build Status](https://travis-ci.org/mr-doc/mr-doc-parser.svg?branch=master)](https://travis-ci.org/mr-doc/mr-doc-parser)
 
-# Introduction
+## Introduction
 
 This is the official parser for Mr. Doc. The parser uses [node-tree-sitter](https://github.com/tree-sitter/node-tree-sitter) to parse different programming languages. It also uses [xdoc-parser](https://github.com/iwatakeshi/xdoc-parser) to parse JSDoc-like syntaxes in a comment. Note that `mr-doc-parser` is in alpha. Thus, the algorithms may change over time. At the moment, there are two languages that are supported by `mr-doc-parser`: JavaScript and TypeScript. More languages can be added as long as [tree-sitter](https://github.com/tree-sitter) can parse them.
 
-# Creating a Language Parser
+## Creating a Language Parser
 
-## Extend the Language Parser
+### Extend the Language Parser
 
 To create a parser, simply extend an abstract class named `Parser` in `src/lang/common/parser.ts`:
 
@@ -20,7 +20,7 @@ abstract class Parser {
 }
 ```
 
-## Implement the Language Visitor
+### Implement the Language Visitor
 
 The next step is to walk the tree that parsed by `tree-sitter` and to wrap each node as an `Node` type.
 Bear in mind that `tree-sitter` keeps its tree as a DOM-like structure.
@@ -56,7 +56,7 @@ abstract class Visitor {
 
 **Note**: See the [JavaScript visitor](./src/lang/javascript/visitor.ts) for an example.
 
-## Return the AST
+### Return the AST
 
 The last step is to return the AST. To do so, simply use the `createNode` function and return an array of `ASTNode` type:
 
