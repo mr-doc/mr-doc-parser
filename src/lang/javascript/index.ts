@@ -11,11 +11,9 @@ import ASTNode from '../../interfaces/ASTNode';
  * 
  * # API
  * 
- * ```
  * @class JavaScriptParser
  * @implements IParser
  * @export default
- * ```
  */
 export default class JavaScriptParser extends Parser {
   private parser: TreeSitter;

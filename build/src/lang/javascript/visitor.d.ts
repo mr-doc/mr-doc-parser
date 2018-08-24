@@ -1,12 +1,12 @@
-import { ASTNode } from "../common/ast";
-import { NodeProperties } from "../common/emca";
-import { NodeVisitor } from "../common/node";
 import { SyntaxNode } from "tree-sitter";
 import Source from "../../interfaces/Source";
+import Visitor from "../common/visitor";
+import ASTNode from "../../interfaces/ASTNode";
+import { JavaScriptProperties } from "./properties";
 /**
  * A class that visits ASTNodes from a TypeScript tree.
  */
-export declare class JavaScriptVisitor implements NodeVisitor {
+export declare class JavaScriptVisitor implements Visitor {
     private ast;
     private source;
     constructor(source: Source);
@@ -27,7 +27,7 @@ export declare class JavaScriptVisitor implements NodeVisitor {
      */
     private filterType;
     getAST(): ASTNode[];
-    visitNode: (node: SyntaxNode, properties?: Partial<NodeProperties>) => ASTNode;
+    visitNode: (node: SyntaxNode, properties?: Partial<JavaScriptProperties>) => ASTNode;
     visitChildren: (nodes: SyntaxNode[]) => ASTNode[];
     private visitProgram;
     private visitComment;

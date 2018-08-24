@@ -1,7 +1,7 @@
 import Source from "./interfaces/Source";
-import Parser from "./lang/common/base.parser";
 import JavaScriptParser from "./lang/javascript";
 import TypeScriptParser from './lang/typescript';
+import Parser from "./lang/common/parser";
 
 export default class ParserFactory {
   private file: Source
