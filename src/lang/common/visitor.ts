@@ -14,7 +14,7 @@ export default abstract class Visitor {
   protected logger: ParserLogger
   constructor(options?: Partial<VisitorOptions>) {
     this.options = options;
-    this.logger = new ParserLogger('mr-doc-parser::parser', this.options.log);
+    this.logger = new ParserLogger(this.options.log);
   }
   abstract getAST(): ASTNode[]
   abstract visitNode(node: SyntaxNode, properties?: object): ASTNode

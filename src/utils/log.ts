@@ -9,8 +9,8 @@ export enum ErrorType {
 }
 
 export default class ParserLogger extends Log {
-    constructor(namespace?: string, options?: LogOptions) {
-        super(namespace, options);
+    constructor(options?: LogOptions) {
+        super('mr-doc::parser', options);
     }
     report = (source: Source, node: SyntaxNode, error: ErrorType): void => {
         const location = range(node).location;
