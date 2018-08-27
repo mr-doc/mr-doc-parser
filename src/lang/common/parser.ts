@@ -6,7 +6,8 @@ import { XDocParserOptions } from "xdoc-parser/src/XDocParser";
 
 export interface ParserOptions {
   log: LogOptions,
-  documentation: XDocParserOptions
+  documentation: XDocParserOptions,
+  language?: string
 }
 
 export default abstract class Parser {
@@ -20,10 +21,11 @@ export default abstract class Parser {
         levels: ['info', 'warn', 'error']
       } as LogOptions,
       documentation: {
-      } as XDocParserOptions
+      } as XDocParserOptions,
     });
   }
   get source(): Source { return this.source_; }
+  get language(): string { return this.options.language; }
   abstract parse(): ASTNode[]
   abstract get tree(): Tree
 }
