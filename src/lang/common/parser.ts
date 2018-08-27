@@ -10,10 +10,10 @@ export interface ParserOptions {
 }
 
 export default abstract class Parser {
-  protected source: Source
+  private source_: Source
   protected options: ParserOptions
   constructor(source: Source, options: Partial<ParserOptions>) {
-    this.source = source;
+    this.source_ = source;
     this.options = Object.assign((options || {}), {
       log: {
         enabled: true,
@@ -23,6 +23,7 @@ export default abstract class Parser {
       } as XDocParserOptions
     });
   }
+  get source(): Source { return this.source_; }
   abstract parse(): ASTNode[]
   abstract get tree(): Tree
 }

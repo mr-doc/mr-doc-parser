@@ -8,9 +8,10 @@ export interface ParserOptions {
     documentation: XDocParserOptions;
 }
 export default abstract class Parser {
-    protected source: Source;
+    private source_;
     protected options: ParserOptions;
     constructor(source: Source, options: Partial<ParserOptions>);
+    readonly source: Source;
     abstract parse(): ASTNode[];
     abstract readonly tree: Tree;
 }

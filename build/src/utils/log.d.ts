@@ -6,6 +6,6 @@ export declare enum ErrorType {
     TreeSitterParseError = 1
 }
 export default class ParserLogger extends Log {
-    constructor(namespace?: string, options?: LogOptions);
+    constructor(options?: LogOptions);
     report: (source: Source, node: SyntaxNode, error: ErrorType) => void;
 }
