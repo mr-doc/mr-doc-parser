@@ -27,7 +27,7 @@
 			"type": "node",
 			"request": "launch",
 			"name": "Launch Program",
-			"program": "${workspaceFolder}/main.js"
+			"program": "${workspaceFolder}/build/index.js"
 		}
 	]
 }

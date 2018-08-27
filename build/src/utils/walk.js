@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const node_1 = require("../lang/common/node");
+function walk(node) {
+    let node_ = new node_1.Node(node);
+    node_.syntaxNode.children.map(child => walk(child));
+    return node_;
+}
+exports.default = walk;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoid2Fsay5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91dGlscy93YWxrLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQ0EsOENBQTBDO0FBQzFDLFNBQXdCLElBQUksQ0FBQyxJQUFnQjtJQUMzQyxJQUFJLEtBQUssR0FBRyxJQUFJLFdBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQztJQUMzQixLQUFLLENBQUMsVUFBVSxDQUFDLFFBQVEsQ0FBQyxHQUFHLENBQUMsS0FBSyxDQUFDLEVBQUUsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLENBQUMsQ0FBQTtJQUNuRCxPQUFPLEtBQUssQ0FBQztBQUNmLENBQUM7QUFKRCx1QkFJQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IFN5bnRheE5vZGUgfSBmcm9tIFwidHJlZS1zaXR0ZXJcIjtcbmltcG9ydCB7IE5vZGUgfSBmcm9tICcuLi9sYW5nL2NvbW1vbi9ub2RlJ1xuZXhwb3J0IGRlZmF1bHQgZnVuY3Rpb24gd2Fsayhub2RlOiBTeW50YXhOb2RlKSB7XG4gIGxldCBub2RlXyA9IG5ldyBOb2RlKG5vZGUpO1xuICBub2RlXy5zeW50YXhOb2RlLmNoaWxkcmVuLm1hcChjaGlsZCA9PiB3YWxrKGNoaWxkKSlcbiAgcmV0dXJuIG5vZGVfO1xufSJdfQ==
